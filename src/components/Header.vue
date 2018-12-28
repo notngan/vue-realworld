@@ -8,7 +8,7 @@
           <router-link class="nav-link active" to="/">Home</router-link>
         </li>
         <li class="nav-item">
-          <router-link class="nav-link" to="/">
+          <router-link class="nav-link" to="/editor">
             <i class="ion-compose"></i>&nbsp;New Post
           </router-link>
         </li>
@@ -18,7 +18,7 @@
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link class="nav-link" to="">Sign up</router-link>
+          <router-link class="nav-link" to="/signup">Sign up</router-link>
         </li>
       </ul>
     </div>
