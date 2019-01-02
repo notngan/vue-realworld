@@ -62,7 +62,7 @@ export default {
 
     onSignup() {
       this.signup(this.user)
-        .then(() => this.$router.push('/signin'))
+        //.then(() => this.$router.push('/signin'))
     }
   },
 }
