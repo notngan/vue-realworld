@@ -13,17 +13,17 @@
             <li>That email is already taken</li>
           </ul>
 
-          <form>
+          <form @submit.prevent="onSignup">
             <fieldset class="form-group">
-              <input class="form-control form-control-lg" type="text" placeholder="Your Name">
+              <input v-model="user.username" class="form-control form-control-lg" type="text" placeholder="Your Name">
             </fieldset>
             <fieldset class="form-group">
-              <input class="form-control form-control-lg" type="text" placeholder="Email">
+              <input v-model="user.email" class="form-control form-control-lg" type="text" placeholder="Email">
             </fieldset>
             <fieldset class="form-group">
-              <input class="form-control form-control-lg" type="password" placeholder="Password">
+              <input v-model="user.password" class="form-control form-control-lg" type="password" placeholder="Password">
             </fieldset>
-            <button class="btn btn-lg btn-primary pull-xs-right">
+            <button type="submit" class="btn btn-lg btn-primary pull-xs-right">
               Sign up
             </button>
           </form>
@@ -33,3 +33,38 @@
     </div>
   </div>
 </template>
+
+<script>
+import { mapActions, mapGetters } from 'vuex'
+export default {
+  data() {
+    return {
+      user: {
+        username: null,
+        email: null,
+        password: null
+      }
+    }
+  },
+
+  computed: {
+    ...mapGetters('auth', ['savedUser'])
+  },
+
+  watch: {
+    savedUser(val) {
+      console.log(val)
+    }
+  },
+
+  methods: {
+    ...mapActions('auth', ['signup']),
+
+    onSignup() {
+      this.signup(this.user)
+        .then(() => this.$router.push('/signin'))
+    }
+  },
+}
+</script>
+
