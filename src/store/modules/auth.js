@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const state = {
-  user: null
+  user: null,
+  token: null,
 }
 
 const mutations = {
