@@ -13,7 +13,7 @@
             <li v-for="(message, index) in messages" :key="index">{{ message }}</li>
           </ul>
 
-          <form  @submit.prevent="onLogin" >
+          <form @submit.prevent="onLogin" >
             <fieldset class="form-group">
               <input class="form-control form-control-lg" type="text" placeholder="Email">
             </fieldset>
@@ -44,20 +44,14 @@ export default {
   },
 
   computed: {
-    ...mapState('auth', ['user']),
-    ...mapState('message', ['messages']),
+    ...mapState('message', ['messages'])
   },
 
   methods: {
     ...mapActions('auth', ['login']),
 
-    onLogin() {
+    onLogin () {
       this.login(this.userData)
-        .then(() => {
-          if (this.user) {
-            this.$router.push('/')
-          }
-        })
     }
   }
 }

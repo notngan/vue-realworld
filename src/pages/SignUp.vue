@@ -6,7 +6,7 @@
         <div class="col-md-6 offset-md-3 col-xs-12">
           <h1 class="text-xs-center">Sign up</h1>
           <p class="text-xs-center">
-            <router-link to="/signin">Have an account?</router-link>
+            <router-link to="/login">Have an account?</router-link>
           </p>
 
           <ul class="error-messages">
@@ -48,8 +48,7 @@ export default {
   },
 
   computed: {
-    ...mapState('auth', ['user']),
-    ...mapState('message', ['messages']),
+    ...mapState('message', ['messages'])
   },
 
   methods: {
@@ -57,11 +56,6 @@ export default {
 
     onSignup() {
       this.signup(this.userData)
-        .then(() => {
-          if(this.user) {
-            this.$router.push('/')
-          }
-        })
     }
   }
 }

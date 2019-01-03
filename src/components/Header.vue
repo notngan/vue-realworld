@@ -4,7 +4,6 @@
       <router-link class="navbar-brand" to="/">conduit</router-link>
       <ul class="nav navbar-nav pull-xs-right">
         <li class="nav-item">
-          <!-- Add "active" class when you're on that page" -->
           <router-link class="nav-link" to="/">Home</router-link>
         </li>
         <li class="nav-item">

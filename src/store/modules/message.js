@@ -15,7 +15,7 @@ const mutations = {
 const actions = {
   addMessage ({ commit }, messages) {
     const messageArr = []
-    for(let key in messages) {
+    for (let key in messages) {
       let mess = `${key} ${messages[key]}`
       mess = mess.charAt(0).toUpperCase() + mess.slice(1)
       messageArr.push(mess)
