@@ -82,7 +82,7 @@
             </div>
           </form>
 
-          <div v-for="item in comments" :key="item.id" class="card">
+          <div v-for="item in commentList" :key="item.id" class="card">
             <div class="card-block">
               <p class="card-text">{{ item.body }}</p>
             </div>
@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
   data() {
     return {
@@ -115,30 +115,17 @@ export default {
   },
 
   computed: {
-    ...mapGetters('article', ['articleBySlug']),
-
-    ...mapState('article', {
-      comments: state => state.commentList
-    }),
-
-    article () {
-      return this.articleBySlug(this.slug)
-    }
+    ...mapState('article', ['commentList', 'article']),
   },
 
-  watch: {
-    comments (val) {
-      console.log(val)
-    }
-  },
-
-  created() {
+  mounted() {
     this.slug = this.$route.params.id
+    this.loadArticle(this.slug)
     this.loadComments(this.slug)
   },
 
   methods: {
-    ...mapActions('article', ['loadComments']),
+    ...mapActions('article', ['loadComments', 'loadArticle']),
   },
 }
 </script>

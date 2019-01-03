@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Home from './pages/Home.vue'
 
 Vue.use(Router)
 
@@ -16,27 +16,27 @@ export default new Router({
     {
       path: '/signup',
       name: 'signup',
-      component: () => import('./views/SignUp.vue')
+      component: () => import('./pages/SignUp.vue')
     },
     {
       path: '/signin',
       name: 'signin',
-      component: () => import('./views/SignIn.vue')
+      component: () => import('./pages/SignIn.vue')
     },
     {
       path: '/editor',
       name: 'editor',
-      component: () => import('./views/Editor.vue')
+      component: () => import('./pages/Editor.vue')
     },
     {
       path: '/profile/:id',
       name: 'profile',
-      component: () => import('./views/Profile.vue')
+      component: () => import('./pages/Profile.vue')
     },
     {
       path: '/article/:id',
       name: 'article',
-      component: () => import('./views/Article.vue')
+      component: () => import('./pages/Article.vue')
     }
   ]
 })

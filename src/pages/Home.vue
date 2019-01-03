@@ -23,21 +23,21 @@
             </ul>
           </div>
 
-          <div v-if="articles">
-            <div v-for="item in articles" :key="item.slug" class="article-preview">
+          <div>
+            <div v-for="article in articleList" :key="article.slug" class="article-preview">
               <div class="article-meta">
-                <router-link :to="'profile/' + item.author.username"><img :src="item.author.image"/></router-link>
+                <router-link :to="'profile/' + article.author.username"><img :src="article.author.image"/></router-link>
                 <div class="info">
-                  <router-link class="author" :to="'profile/' + item.author.username">{{item.author.username}}</router-link>
-                  <span class="date">{{formatDate(item.createdAt)}}</span>
+                  <router-link class="author" :to="'profile/' + article.author.username">{{article.author.username}}</router-link>
+                  <span class="date">{{formatDate(article.createdAt)}}</span>
                 </div>
                 <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                  <i class="ion-heart"></i> {{ item.favoritesCount }}
+                  <i class="ion-heart"></i> {{ article.favoritesCount }}
                 </button>
               </div>
-              <router-link :to="'article/' + item.slug" class="preview-link">
-                <h1>{{ item.title }}</h1>
-                <p>{{ item.description }}</p>
+              <router-link :to="'article/' + article.slug" class="preview-link">
+                <h1>{{ article.title }}</h1>
+                <p>{{ article.description }}</p>
                 <span>Read more...</span>
               </router-link>
             </div>
@@ -68,10 +68,18 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapState } from 'vuex'
+
 export default {
   computed: {
-    ...mapGetters('article', ['articles']),
+    ...mapState('articles', ['articleList']),
   },
+  methods: {
+    ...mapActions('articles', ['loadArticles']),
+  },
+
+  created() {
+    this.loadArticles();
+  }
 }
 </script>

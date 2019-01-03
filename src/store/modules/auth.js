@@ -2,30 +2,40 @@ import axios from 'axios';
 
 const state = {
   user: null,
-  token: null,
 }
 
 const mutations = {
-  'SAVE_USER'(state, payload) {
+  'AUTH_USER'(state, payload) {
     state.user = payload
-  }
+  },
 }
 
 const actions = {
-  signup({commit}, user) {
-    //console.log(userData)
-    axios.post('users', {user: user})
+  signup({ commit, dispatch }, userData) {
+    axios.post('users', {user: userData})
       .then(res => {
-        commit('SAVE_USER', res.data.user)
+        commit('AUTH_USER', res.data.user)
       })
-      .catch(error => console.log(error))
+      .catch(error => {
+        dispatch('message/addMessage', error.response.data.errors, { root: true })
+      })
+  },
+
+  login({ commit }, userData) {
+    axios.post('users/login', {user: userData})
+      .then(res => {
+        commit('AUTH_USER', res.data.user)
+      })
+      .catch(error => {
+        throw error
+      })
   }
 }
 
 const getters = {
-  savedUser(state) {
-    return state.user
-  }
+  // user(state) {
+  //   return state.user
+  // }
 }
 
 export default {
