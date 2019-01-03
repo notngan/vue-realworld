@@ -22,17 +22,10 @@ const actions = {
   }
 }
 
-const getters = {
-  savedUser(state) {
-    return state.user
-  }
-}
-
 export default {
   namespaced: true,
   state,
   actions,
-  mutations,
-  getters
+  mutations
 }
 

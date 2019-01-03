@@ -10,8 +10,8 @@
         <div class="article-meta">
           <a href=""><img :src="article.author.image" /></a>
           <div class="info">
-            <a href="" class="author">{{ article.author.username }}</a>
-            <span class="date">{{formatDate(article.createdAt)}}</span>
+            <router-link :to="`/profile/${article.author.username}`" class="author" exact>{{ article.author.username }}</router-link>
+            <span class="date">{{ formatDate(article.createdAt) }}</span>
           </div>
           <button class="btn btn-sm btn-outline-secondary">
             <i class="ion-plus-round"></i>
@@ -75,7 +75,7 @@
               <textarea class="form-control" placeholder="Write a comment..." rows="3"></textarea>
             </div>
             <div class="card-footer">
-              <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
+              <img v-if="user" :src="user.image" class="comment-author-img" />
               <button class="btn btn-sm btn-primary">
               Post Comment
               </button>
@@ -108,12 +108,6 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 export default {
-  data() {
-    return {
-      slug: null,
-    }
-  },
-
   computed: {
     ...mapGetters('article', ['articleBySlug']),
 
