@@ -6,22 +6,22 @@
         <div class="col-md-6 offset-md-3 col-xs-12">
           <h1 class="text-xs-center">Sign up</h1>
           <p class="text-xs-center">
-            <router-link to="/signin">Have an account?</router-link>
+            <router-link to="/login">Have an account?</router-link>
           </p>
 
           <ul class="error-messages">
-            <li>That email is already taken</li>
+            <li v-for="(message, index) in messages" :key="index">{{ message }}</li>
           </ul>
 
           <form @submit.prevent="onSignup">
             <fieldset class="form-group">
-              <input v-model="user.username" class="form-control form-control-lg" type="text" placeholder="Your Name">
+              <input v-model="userData.username" class="form-control form-control-lg" type="text" placeholder="Your Name">
             </fieldset>
             <fieldset class="form-group">
-              <input v-model="user.email" class="form-control form-control-lg" type="text" placeholder="Email">
+              <input v-model="userData.email" class="form-control form-control-lg" type="text" placeholder="Email">
             </fieldset>
             <fieldset class="form-group">
-              <input v-model="user.password" class="form-control form-control-lg" type="password" placeholder="Password">
+              <input v-model="userData.password" class="form-control form-control-lg" type="password" placeholder="Password">
             </fieldset>
             <button type="submit" class="btn btn-lg btn-primary pull-xs-right">
               Sign up
@@ -35,11 +35,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
   data() {
     return {
-      user: {
+      userData: {
         username: null,
         email: null,
         password: null
@@ -48,23 +48,16 @@ export default {
   },
 
   computed: {
-    ...mapGetters('auth', ['savedUser'])
-  },
-
-  watch: {
-    savedUser(val) {
-      console.log(val)
-    }
+    ...mapState('message', ['messages'])
   },
 
   methods: {
     ...mapActions('auth', ['signup']),
 
     onSignup() {
-      this.signup(this.user)
-        //.then(() => this.$router.push('/signin'))
+      this.signup(this.userData)
     }
-  },
+  }
 }
 </script>
 

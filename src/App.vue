@@ -9,20 +9,11 @@
 <script>
 import AppHeader from '@/components/Header'
 import AppFooter from '@/components/Footer'
-import { mapActions } from 'vuex'
 
 export default {
   components: {
     AppHeader,
     AppFooter
-  },
-
-  methods: {
-    ...mapActions('article', ['loadArticles']),
-  },
-
-  mounted() {
-    this.loadArticles();
   }
 }
 </script>

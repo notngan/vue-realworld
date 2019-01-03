@@ -5,7 +5,7 @@ import store from './store/store'
 import axios from 'axios'
 
 axios.defaults.headers.common['Content-Type'] = 'application/json';
-axios.defaults.baseURL = 'https://conduit.productionready.io/api'
+axios.defaults.baseURL = 'https://conduit.productionready.io/api/'
 
 Vue.config.productionTip = false
 
@@ -33,6 +33,5 @@ Vue.mixin({
 new Vue({
   router,
   store,
-  axios,
   render: h => h(App)
 }).$mount('#app')

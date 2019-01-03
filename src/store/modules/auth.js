@@ -1,30 +1,37 @@
 import axios from 'axios';
+import router from '../../router'
 
 const state = {
-  user: null,
-  token: null,
+  user: null
 }
 
 const mutations = {
-  'SAVE_USER'(state, payload) {
+  'AUTH_USER' (state, payload) {
     state.user = payload
   }
 }
 
 const actions = {
-  signup({commit}, user) {
-    //console.log(userData)
-    axios.post('users', {user: user})
+  signup ({ commit, dispatch }, userData) {
+    axios.post('users', {user: userData})
       .then(res => {
-        commit('SAVE_USER', res.data.user)
+        commit('AUTH_USER', res.data.user)
+        router.push('/')
       })
-      .catch(error => console.log(error))
-  }
-}
+      .catch(error => {
+        dispatch('message/addMessage', error.response.data.errors, { root: true })
+      })
+  },
 
-const getters = {
-  savedUser(state) {
-    return state.user
+  login ({ commit, dispatch }, userData) {
+    axios.post('users/login', {user: userData})
+      .then(res => {
+        commit('AUTH_USER', res.data.user)
+        router.push('/')
+      })
+      .catch(error => {
+        dispatch('message/addMessage', error.response.data.errors, { root: true })
+      })
   }
 }
 
@@ -32,7 +39,6 @@ export default {
   namespaced: true,
   state,
   actions,
-  mutations,
-  getters
+  mutations
 }
 

@@ -1,52 +1,35 @@
 import axios from 'axios';
 
 const state = {
-  articleList: [],
+  article: null,
   commentList: []
 }
 
 const mutations = {
-  'LOAD_ARTICLES'(state, payload) {
-    state.articleList = payload;
-    //console.log(payload);
+  'LOAD_ARTICLE' (state, payload) {
+    state.article = payload
   },
 
   'LOAD_COMMENTS'(state, payload) {
     state.commentList = payload
-    // console.log(payload)
   }
 }
 
 const actions = {
-  loadArticles({commit}) {
-    axios.get('articles')
-      .then(res => commit('LOAD_ARTICLES', res.data.articles))
+  loadArticle ({ commit }, slug) {
+    axios.get(`articles/${slug}`)
+      .then(res => commit('LOAD_ARTICLE', res.data.article))
       .catch(error => {
-        throw error
-      });
+        throw error;
+      })
   },
 
-  loadComments({commit}, slug) {
+  loadComments({ commit }, slug) {
     axios.get(`articles/${slug}/comments`)
       .then (res => commit('LOAD_COMMENTS', res.data.comments))
       .catch(error => {
         throw error
     })
-  }
-
-}
-
-const getters = {
-  articles(state) {
-    return state.articleList
-  },
-
-  articleBySlug(state) {
-    return (slug) => {
-      return state.articleList.find((article) => {
-        return article.slug === slug
-      })
-    }
   }
 }
 
@@ -55,6 +38,5 @@ export default {
   state,
   actions,
   mutations,
-  getters
 }
 

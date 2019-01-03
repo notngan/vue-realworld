@@ -10,8 +10,8 @@
         <div class="article-meta">
           <a href=""><img :src="article.author.image" /></a>
           <div class="info">
-            <a href="" class="author">{{ article.author.username }}</a>
-            <span class="date">{{formatDate(article.createdAt)}}</span>
+            <router-link :to="`/profile/${article.author.username}`" class="author" exact>{{ article.author.username }}</router-link>
+            <span class="date">{{ formatDate(article.createdAt) }}</span>
           </div>
           <button class="btn btn-sm btn-outline-secondary">
             <i class="ion-plus-round"></i>
@@ -75,24 +75,24 @@
               <textarea class="form-control" placeholder="Write a comment..." rows="3"></textarea>
             </div>
             <div class="card-footer">
-              <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
+              <img v-if="user" :src="user.image" class="comment-author-img" />
               <button class="btn btn-sm btn-primary">
               Post Comment
               </button>
             </div>
           </form>
 
-          <div v-for="item in comments" :key="item.id" class="card">
+          <div v-for="comment in commentList" :key="comment.id" class="card">
             <div class="card-block">
-              <p class="card-text">{{ item.body }}</p>
+              <p class="card-text">{{ comment.body }}</p>
             </div>
             <div class="card-footer">
-              <a href="" class="comment-author">
-                <img :src="item.author.image" class="comment-author-img"/>
-              </a>
+              <router-link class="comment-author" :to="`/profile/${comment.author.username}`">
+                <img :src="comment.author.image" class="comment-author-img"/>
+              </router-link>
               &nbsp;
-              <router-link class="comment-author" :to="'/profile/' + item.author.username">{{ item.author.username }}</router-link>
-              <span class="date-posted">{{ formatDate(item.createdAt) }}</span>
+              <router-link class="comment-author" :to="`/profile/${comment.author.username}`">{{ comment.author.username }}</router-link>
+              <span class="date-posted">{{ formatDate(comment.createdAt) }}</span>
             </div>
           </div>
 
@@ -106,39 +106,21 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
-  data() {
-    return {
-      slug: null,
-    }
-  },
-
   computed: {
-    ...mapGetters('article', ['articleBySlug']),
-
-    ...mapState('article', {
-      comments: state => state.commentList
-    }),
-
-    article () {
-      return this.articleBySlug(this.slug)
-    }
-  },
-
-  watch: {
-    comments (val) {
-      console.log(val)
-    }
-  },
-
-  created() {
-    this.slug = this.$route.params.id
-    this.loadComments(this.slug)
+    ...mapState('article', ['commentList', 'article']),
+    ...mapState('auth', ['user'])
   },
 
   methods: {
-    ...mapActions('article', ['loadComments']),
+    ...mapActions('article', ['loadComments', 'loadArticle'])
+  },
+
+  created () {
+    this.loadArticle(this.$route.params.id)
+    this.loadComments(this.$route.params.id)
+    console.log(this.user)
   },
 }
 </script>
