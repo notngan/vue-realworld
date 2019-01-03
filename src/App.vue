@@ -9,7 +9,6 @@
 <script>
 import AppHeader from '@/components/Header'
 import AppFooter from '@/components/Footer'
-import { mapActions } from 'vuex'
 
 export default {
   components: {

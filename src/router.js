@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './pages/Home.vue'
+import store from './store/store'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -19,9 +20,9 @@ export default new Router({
       component: () => import('./pages/SignUp.vue')
     },
     {
-      path: '/signin',
-      name: 'signin',
-      component: () => import('./pages/SignIn.vue')
+      path: '/login',
+      name: 'login',
+      component: () => import('./pages/Login.vue')
     },
     {
       path: '/editor',
@@ -40,3 +41,10 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  store.dispatch('message/clearMessage')
+  next()
+})
+
+export default router

@@ -4,24 +4,24 @@
       <div class="row">
 
         <div class="col-md-6 offset-md-3 col-xs-12">
-          <h1 class="text-xs-center">Sign in</h1>
+          <h1 class="text-xs-center">Log in</h1>
           <p class="text-xs-center">
             <router-link to="/signup">Don't have an account?</router-link>
           </p>
 
           <ul class="error-messages">
-            <li>That email is already taken</li>
+            <li v-for="(message, index) in messages" :key="index">{{ message }}</li>
           </ul>
 
-          <form>
-            <fieldset @submit.prevent="onSignin" class="form-group">
+          <form  @submit.prevent="onLogin" >
+            <fieldset class="form-group">
               <input class="form-control form-control-lg" type="text" placeholder="Email">
             </fieldset>
             <fieldset class="form-group">
               <input class="form-control form-control-lg" type="password" placeholder="Password">
             </fieldset>
             <button type="submit" class="btn btn-lg btn-primary pull-xs-right">
-              Sign up
+              Log in
             </button>
           </form>
         </div>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -42,28 +42,24 @@ export default {
       }
     }
   },
+
   computed: {
-    ...mapGetters('auth', ['user'])
+    ...mapState('auth', ['user']),
+    ...mapState('message', ['messages']),
   },
 
   methods: {
     ...mapActions('auth', ['login']),
-    onSignin() {
+
+    onLogin() {
       this.login(this.userData)
-      // .then(() => this.$router.push('/'))
-    }
-  },
-
-  created() {
-
-  },
-
-  watch: {
-    user (val) {
-     console.log(val)
+        .then(() => {
+          if (this.user) {
+            this.$router.push('/')
+          }
+        })
     }
   }
-
 }
 </script>
 

@@ -95,7 +95,6 @@ export default {
   },
   created() {
     this.username = this.$route.params.id
-    console.log(this.username)
   },
 }
 </script>

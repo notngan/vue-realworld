@@ -82,17 +82,17 @@
             </div>
           </form>
 
-          <div v-for="item in commentList" :key="item.id" class="card">
+          <div v-for="comment in commentList" :key="comment.id" class="card">
             <div class="card-block">
-              <p class="card-text">{{ item.body }}</p>
+              <p class="card-text">{{ comment.body }}</p>
             </div>
             <div class="card-footer">
-              <a href="" class="comment-author">
-                <img :src="item.author.image" class="comment-author-img"/>
-              </a>
+              <router-link class="comment-author" :to="`/profile/${comment.author.username}`">
+                <img :src="comment.author.image" class="comment-author-img"/>
+              </router-link>
               &nbsp;
-              <router-link class="comment-author" :to="'/profile/' + item.author.username">{{ item.author.username }}</router-link>
-              <span class="date-posted">{{ formatDate(item.createdAt) }}</span>
+              <router-link class="comment-author" :to="`/profile/${comment.author.username}`">{{ comment.author.username }}</router-link>
+              <span class="date-posted">{{ formatDate(comment.createdAt) }}</span>
             </div>
           </div>
 
@@ -108,12 +108,6 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 export default {
-  data() {
-    return {
-      slug: null,
-    }
-  },
-
   computed: {
     ...mapState('article', ['commentList', 'article']),
   },

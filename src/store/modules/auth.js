@@ -19,30 +19,23 @@ const actions = {
       .catch(error => {
         dispatch('message/addMessage', error.response.data.errors, { root: true })
       })
-  },
+    },
 
-  login({ commit }, userData) {
-    axios.post('users/login', {user: userData})
+    login({ commit, dispatch }, userData) {
+      axios.post('users/login', {user: userData})
       .then(res => {
         commit('AUTH_USER', res.data.user)
       })
       .catch(error => {
-        throw error
+        dispatch('message/addMessage', error.response.data.errors, { root: true })
       })
   }
-}
-
-const getters = {
-  // user(state) {
-  //   return state.user
-  // }
 }
 
 export default {
   namespaced: true,
   state,
   actions,
-  mutations,
-  getters
+  mutations
 }
 
