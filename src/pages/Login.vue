@@ -15,10 +15,10 @@
 
           <form @submit.prevent="onLogin" >
             <fieldset class="form-group">
-              <input class="form-control form-control-lg" type="text" placeholder="Email">
+              <input v-model="userData.email" class="form-control form-control-lg" type="text" placeholder="Email">
             </fieldset>
             <fieldset class="form-group">
-              <input class="form-control form-control-lg" type="password" placeholder="Password">
+              <input v-model="userData.password" class="form-control form-control-lg" type="password" placeholder="Password">
             </fieldset>
             <button type="submit" class="btn btn-lg btn-primary pull-xs-right">
               Log in
