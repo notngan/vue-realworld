@@ -18,10 +18,15 @@
         </li>
         <template v-if="!user">
           <li class="nav-item">
-            <router-link class="nav-link" to="/signup">Sign up</router-link>
+            <router-link class="nav-link" to="/signup">Signup</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/login">Log in</router-link>
+            <router-link class="nav-link" to="/login">Login</router-link>
+          </li>
+        </template>
+        <template v-else>
+          <li class="nav-item">
+            <router-link class="nav-link" :to="`/profile/${user.username}`">{{ user.username }}</router-link>
           </li>
         </template>
       </ul>
@@ -34,8 +39,7 @@ import { mapState } from 'vuex'
 export default {
   computed: {
     ...mapState('auth', ['user'])
-  },
-
+  }
 }
 </script>
 
