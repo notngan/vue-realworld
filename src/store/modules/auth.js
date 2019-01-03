@@ -23,6 +23,7 @@ const actions = {
       })
   },
 
+<<<<<<< HEAD
   login ({ commit, dispatch }, userData) {
     axios.post('users/login', {user: userData})
       .then(res => {
@@ -35,6 +36,8 @@ const actions = {
   }
 }
 
+=======
+>>>>>>> eb1a395... sth
 export default {
   namespaced: true,
   state,
