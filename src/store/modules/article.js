@@ -4,7 +4,6 @@ import {
   LOAD_COMMENTS
 } from '../mutation-types'
 
-
 const state = {
   article: null,
   commentList: []
@@ -23,7 +22,7 @@ const mutations = {
 const actions = {
   loadArticle ({ commit }, slug) {
     axios.get(`articles/${slug}`)
-      .then(res => commit('LOAD_ARTICLE', res.data.article))
+      .then(res => commit(LOAD_ARTICLE, res.data.article))
       .catch(error => {
         throw error;
       })
@@ -31,7 +30,7 @@ const actions = {
 
   loadComments({ commit }, slug) {
     axios.get(`articles/${slug}/comments`)
-      .then (res => commit('LOAD_COMMENTS', res.data.comments))
+      .then (res => commit(LOAD_COMMENTS, res.data.comments))
       .catch(error => {
         throw error
     })

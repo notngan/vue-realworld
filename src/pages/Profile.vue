@@ -1,20 +1,18 @@
 <template>
-  <div class="profile-page">
+  <div v-if="user" class="profile-page">
 
     <div class="user-info">
       <div class="container">
         <div class="row">
 
           <div class="col-xs-12 col-md-10 offset-md-1">
-            <img src="http://i.imgur.com/Qr71crq.jpg" class="user-img" />
-            <h4>Eric Simons</h4>
-            <p>
-              Cofounder @GoThinkster, lived in Aol's HQ for a few months, kinda looks like Peeta from the Hunger Games
-            </p>
+            <img :src="user.image" class="user-img" />
+            <h4>{{ user.username }}</h4>
+            <p>{{ user.bio }}</p>
             <button class="btn btn-sm btn-outline-secondary action-btn">
               <i class="ion-plus-round"></i>
               &nbsp;
-              Follow Eric Simons
+              Follow {{ user.username }}
             </button>
           </div>
 
@@ -87,15 +85,20 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
+
 export default {
-  data() {
-    return {
-      username: null
-    }
+  computed: {
+    ...mapState('auth', ['user'])
   },
-  created() {
-    this.username = this.$route.params.id
+
+  methods: {
+    ...mapActions('auth', ['fetchUser']),
   },
+
+  created () {
+    this.fetchUser()
+  }
 }
 </script>
 

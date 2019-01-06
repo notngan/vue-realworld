@@ -25,11 +25,11 @@ const actions = {
       mess = mess.charAt(0).toUpperCase() + mess.slice(1)
       messageArr.push(mess)
     }
-    commit('ADD_MESSAGE', messageArr)
+    commit(ADD_MESSAGE, messageArr)
   },
 
   clearMessage ({ commit }) {
-    commit('CLEAR_MESSAGE')
+    commit(CLEAR_MESSAGE)
   }
 }
 

@@ -16,14 +16,11 @@ const mutations = {
 const actions = {
   loadArticles({commit}) {
     axios.get('articles')
-      .then(res => commit('LOAD_ARTICLES', res.data.articles))
+      .then(res => commit(LOAD_ARTICLES, res.data.articles))
       .catch(error => {
         throw error
       });
   },
-}
-
-const getters = {
 }
 
 export default {
@@ -31,6 +28,5 @@ export default {
   state,
   actions,
   mutations,
-  getters
 }
 
