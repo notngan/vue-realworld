@@ -28,6 +28,9 @@
           <li class="nav-item">
             <router-link class="nav-link" :to="`/profile/${username}`">{{ username }}</router-link>
           </li>
+          <li class="nav-item">
+            <button class="btn btn-outline-secondary btn-sm" @click="onLogout" style="margin-top: 6px;">Logout</button>
+          </li>
         </template>
       </ul>
     </div>
@@ -35,10 +38,19 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+
 export default {
   computed: {
     ...mapState('auth', ['token', 'username'])
+  },
+
+  methods: {
+    ...mapActions('auth', ['logout']),
+
+    onLogout () {
+      this.logout()
+    }
   }
 }
 </script>
