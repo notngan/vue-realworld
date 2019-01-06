@@ -1,4 +1,8 @@
 import axios from 'axios';
+import {
+  LOAD_ARTICLE,
+  LOAD_COMMENTS
+} from '../mutation-types'
 
 const state = {
   article: null,
@@ -6,11 +10,11 @@ const state = {
 }
 
 const mutations = {
-  'LOAD_ARTICLE' (state, payload) {
+  [LOAD_ARTICLE] (state, payload) {
     state.article = payload
   },
 
-  'LOAD_COMMENTS'(state, payload) {
+  [LOAD_COMMENTS] (state, payload) {
     state.commentList = payload
   }
 }
@@ -18,7 +22,7 @@ const mutations = {
 const actions = {
   loadArticle ({ commit }, slug) {
     axios.get(`articles/${slug}`)
-      .then(res => commit('LOAD_ARTICLE', res.data.article))
+      .then(res => commit(LOAD_ARTICLE, res.data.article))
       .catch(error => {
         throw error;
       })
@@ -26,7 +30,7 @@ const actions = {
 
   loadComments({ commit }, slug) {
     axios.get(`articles/${slug}/comments`)
-      .then (res => commit('LOAD_COMMENTS', res.data.comments))
+      .then (res => commit(LOAD_COMMENTS, res.data.comments))
       .catch(error => {
         throw error
     })

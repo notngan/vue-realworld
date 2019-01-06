@@ -1,11 +1,14 @@
 import axios from 'axios';
+import {
+  LOAD_ARTICLES
+} from '../mutation-types'
 
 const state = {
   articleList: [],
 }
 
 const mutations = {
-  'LOAD_ARTICLES'(state, payload) {
+  [LOAD_ARTICLES] (state, payload) {
     state.articleList = payload;
   }
 }
@@ -13,14 +16,11 @@ const mutations = {
 const actions = {
   loadArticles({commit}) {
     axios.get('articles')
-      .then(res => commit('LOAD_ARTICLES', res.data.articles))
+      .then(res => commit(LOAD_ARTICLES, res.data.articles))
       .catch(error => {
         throw error
       });
   },
-}
-
-const getters = {
 }
 
 export default {
@@ -28,6 +28,5 @@ export default {
   state,
   actions,
   mutations,
-  getters
 }
 

@@ -1,13 +1,18 @@
+import {
+  ADD_MESSAGE,
+  CLEAR_MESSAGE
+} from '../mutation-types'
+
 const state = {
   messages: []
 }
 
 const mutations = {
-  'ADD_MESSAGE' (state, payload) {
+  [ADD_MESSAGE] (state, payload) {
     state.messages = payload
   },
 
-  'CLEAR_MESSAGE' (state) {
+  [CLEAR_MESSAGE] (state) {
     state.messages = []
   }
 }
@@ -20,11 +25,11 @@ const actions = {
       mess = mess.charAt(0).toUpperCase() + mess.slice(1)
       messageArr.push(mess)
     }
-    commit('ADD_MESSAGE', messageArr)
+    commit(ADD_MESSAGE, messageArr)
   },
 
   clearMessage ({ commit }) {
-    commit('CLEAR_MESSAGE')
+    commit(CLEAR_MESSAGE)
   }
 }
 
