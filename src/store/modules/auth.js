@@ -12,7 +12,7 @@ const state = {
 }
 
 const mutations = {
-  'AUTH_USER' (state, payload) {
+  [AUTH_USER] (state, payload) {
     state.username = payload.username
     state.token = payload.token
   },
