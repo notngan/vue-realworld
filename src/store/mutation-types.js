@@ -1,1 +1,6 @@
 export const AUTH_USER = 'AUTH_USER'
+export const LOAD_ARTICLE = 'LOAD_ARTICLE'
+export const LOAD_COMMENTS = 'LOAD_COMMENTS'
+export const LOAD_ARTICLES = 'LOAD_ARTICLES'
+export const ADD_MESSAGE = 'ADD_MESSAGE'
+export const CLEAR_MESSAGE = 'CLEAR_MESSAGE'

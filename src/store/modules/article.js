@@ -1,4 +1,9 @@
 import axios from 'axios';
+import {
+  LOAD_ARTICLE,
+  LOAD_COMMENTS
+} from '../mutation-types'
+
 
 const state = {
   article: null,
@@ -6,11 +11,11 @@ const state = {
 }
 
 const mutations = {
-  'LOAD_ARTICLE' (state, payload) {
+  [LOAD_ARTICLE] (state, payload) {
     state.article = payload
   },
 
-  'LOAD_COMMENTS'(state, payload) {
+  [LOAD_COMMENTS] (state, payload) {
     state.commentList = payload
   }
 }

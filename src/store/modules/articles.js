@@ -1,11 +1,14 @@
 import axios from 'axios';
+import {
+  LOAD_ARTICLES
+} from '../mutation-types'
 
 const state = {
   articleList: [],
 }
 
 const mutations = {
-  'LOAD_ARTICLES'(state, payload) {
+  [LOAD_ARTICLES] (state, payload) {
     state.articleList = payload;
   }
 }
