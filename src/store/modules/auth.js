@@ -1,5 +1,8 @@
 import axios from 'axios';
 import router from '../../router'
+import {
+  AUTH_USER
+} from '../mutation-types'
 
 const state = {
   user: null,
@@ -8,7 +11,7 @@ const state = {
 }
 
 const mutations = {
-  'AUTH_USER' (state, payload) {
+  [AUTH_USER] (state, payload) {
     state.username = payload.username
     state.token = payload.token
   }
