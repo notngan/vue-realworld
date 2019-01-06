@@ -58,6 +58,13 @@ const actions = {
       username: username,
       token: token  
     })
+  },
+
+  logout ({ commit }) {
+    commit('AUTH_USER', {
+      username: null,
+      token: null
+    })
   }
 }
 
