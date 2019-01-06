@@ -2,20 +2,30 @@ import axios from 'axios';
 import router from '../../router'
 
 const state = {
-  user: null
+  user: null,
+  username: null, 
+  token: null
 }
 
 const mutations = {
   'AUTH_USER' (state, payload) {
-    state.user = payload
+    state.username = payload.username
+    state.token = payload.token
   }
 }
 
 const actions = {
   signup ({ commit, dispatch }, userData) {
-    axios.post('users', {user: userData})
+    axios.post('users', { user: userData })
       .then(res => {
-        commit('AUTH_USER', res.data.user)
+        const username = res.data.user.username
+        const token = res.data.user.token
+        localStorage.setItem('username', username)
+        localStorage.setItem('token', token)
+        commit('AUTH_USER', {
+          username: username,
+          token: token  
+        })
         router.push('/')
       })
       .catch(error => {
@@ -23,21 +33,34 @@ const actions = {
       })
   },
 
-<<<<<<< HEAD
   login ({ commit, dispatch }, userData) {
-    axios.post('users/login', {user: userData})
+    axios.post('users/login', { user: userData })
       .then(res => {
-        commit('AUTH_USER', res.data.user)
+        const username = res.data.user.username
+        const token = res.data.user.token
+        localStorage.setItem('username', username)
+        localStorage.setItem('token', token)
+        commit('AUTH_USER', {
+          username: username,
+          token: token  
+        })
         router.push('/')
       })
       .catch(error => {
         dispatch('message/addMessage', error.response.data.errors, { root: true })
       })
+  },
+
+  autoLogin ({ commit }) {
+    const token = localStorage.getItem('token')
+    const username = localStorage.getItem('username')
+    commit('AUTH_USER', {
+      username: username,
+      token: token  
+    })
   }
 }
 
-=======
->>>>>>> eb1a395... sth
 export default {
   namespaced: true,
   state,
