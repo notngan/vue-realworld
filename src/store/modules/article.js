@@ -23,18 +23,19 @@ const actions = {
   loadArticle ({ commit }, slug) {
     axios.get(`articles/${slug}`)
       .then(res => commit(LOAD_ARTICLE, res.data.article))
-      .catch(error => {
-        throw error;
+      .catch(err => {
+        throw err;
       })
   },
 
   loadComments({ commit }, slug) {
     axios.get(`articles/${slug}/comments`)
       .then (res => commit(LOAD_COMMENTS, res.data.comments))
-      .catch(error => {
-        throw error
+      .catch(err => {
+        throw err
     })
-  }
+  },
+
 }
 
 export default {

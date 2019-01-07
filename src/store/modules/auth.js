@@ -7,7 +7,7 @@ import {
 
 const state = {
   user: null,
-  username: null, 
+  username: null,
   token: null
 }
 
@@ -32,12 +32,12 @@ const actions = {
         localStorage.setItem('token', token)
         commit(AUTH_USER, {
           username: username,
-          token: token  
+          token: token
         })
         router.push('/')
       })
-      .catch(error => {
-        dispatch('message/addMessage', error.response.data.errors, { root: true })
+      .catch(err => {
+        dispatch('message/addMessage', err.response.data.errors, { root: true })
       })
   },
 
@@ -50,12 +50,12 @@ const actions = {
         localStorage.setItem('token', token)
         commit(AUTH_USER, {
           username: username,
-          token: token  
+          token: token
         })
         router.push('/')
       })
-      .catch(error => {
-        dispatch('message/addMessage', error.response.data.errors, { root: true })
+      .catch(err => {
+        dispatch('message/addMessage', err.response.data.errors, { root: true })
       })
   },
 
@@ -64,7 +64,7 @@ const actions = {
     const username = localStorage.getItem('username')
     commit(AUTH_USER, {
       username: username,
-      token: token  
+      token: token
     })
   },
 
@@ -73,17 +73,18 @@ const actions = {
       username: null,
       token: null
     })
+    localStorage.clear()
   },
 
   fetchUser ({ commit, state, dispatch }) {
     if (!state.username) return
     axios.get(`profiles/${state.username}`)
       .then(res => {
-        console.log(res.data.profile)
+        //console.log(res.data.profile)
         commit(FETCH_USER, res.data.profile)
       })
-      .catch(error => {
-        dispatch('message/addMessage', error.response.data.errors, { root: true })
+      .catch(err => {
+        dispatch('message/addMessage', err.response.data.errors, { root: true })
       })
   }
 }

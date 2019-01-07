@@ -23,25 +23,10 @@
             </ul>
           </div>
 
-          <div>
-            <div v-for="article in articleList" :key="article.slug" class="article-preview">
-              <div class="article-meta">
-                <router-link :to="'profile/' + article.author.username"><img :src="article.author.image"/></router-link>
-                <div class="info">
-                  <router-link class="author" :to="'profile/' + article.author.username">{{article.author.username}}</router-link>
-                  <span class="date">{{formatDate(article.createdAt)}}</span>
-                </div>
-                <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                  <i class="ion-heart"></i> {{ article.favoritesCount }}
-                </button>
-              </div>
-              <router-link :to="'article/' + article.slug" class="preview-link">
-                <h1>{{ article.title }}</h1>
-                <p>{{ article.description }}</p>
-                <span>Read more...</span>
-              </router-link>
-            </div>
-          </div>
+          <article-item
+            v-for="article in articleList" :key="article.slug"
+            :article="article"/>
+
         </div>
 
         <div class="col-md-3">
@@ -69,8 +54,12 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import ArticleItem from '../components/ArticleItem'
 
 export default {
+  components: {
+    ArticleItem
+  },
   computed: {
     ...mapState('articles', ['articleList']),
   },
