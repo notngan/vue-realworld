@@ -105,10 +105,10 @@
             <div class="card-block">
               <textarea class="form-control" placeholder="Write a comment..." rows="3"></textarea>
             </div>
-            <div v-if="user" class="card-footer">
-              <img :src="user.image" class="comment-author-img" />
+            <div class="card-footer">
+              <img v-if="user" :src="user.image" class="comment-author-img" />
               &nbsp;
-              <router-link :to="`/profile/${user.username}`">{{ user.username }}</router-link>
+              <router-link v-if="user" :to="`/profile/${user.username}`">{{ user.username }}</router-link>
               <button class="btn btn-sm btn-primary">
               Post Comment
               </button>
@@ -135,23 +135,41 @@
 
     </div>
 
+    <global-message v-show="messages.length > 0"/>
+
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
+import GlobalMessage from '../components/GlobalMessage'
+
 export default {
+  components: {
+    GlobalMessage
+  },
+
   computed: {
     ...mapState('article', ['commentList', 'article']),
-    ...mapState('auth', ['user', 'username', 'token'])
+    ...mapState('auth', ['user', 'username', 'token']),
+    ...mapState('message', ['messages'])
   },
 
   methods: {
     ...mapActions('article', ['loadComments', 'loadArticle', 'followAuthor', 'unfollowAuthor']),
     ...mapActions('articles', ['addFavorite', 'removeFavorite']),
     ...mapActions('auth', ['fetchUser']),
+    ...mapMutations('message', ['ADD_MESSAGE', 'CLEAR_MESSAGE']),
 
     onAddFavorite () {
+      if (!localStorage.getItem('token')) {
+        this.ADD_MESSAGE(['You need to login to continue.'])
+        setTimeout(() => {
+          this.CLEAR_MESSAGE()
+        }, 3000);
+        return
+      }
+
       if (this.article.favorited) {
         this.removeFavorite(this.article.slug)
       } else {
@@ -160,6 +178,14 @@ export default {
     },
 
     onFollowAuthor () {
+      if (!localStorage.getItem('token')) {
+        this.ADD_MESSAGE(['You need to login to continue.'])
+        setTimeout(() => {
+          this.CLEAR_MESSAGE()
+        }, 3000);
+        return
+      }
+
       if (this.article.author.following) {
         this.unfollowAuthor(this.article.author.username)
       } else {
@@ -169,11 +195,12 @@ export default {
   },
 
   created () {
-    if (!this.$route.params.id) return
     this.loadArticle(this.$route.params.id)
     this.loadComments(this.$route.params.id)
-    this.fetchUser(this.username)
-  }
+    if (this.username) {
+      this.fetchUser(this.username)
+    }
+  },
 }
 </script>
 

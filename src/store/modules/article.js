@@ -46,9 +46,9 @@ const actions = {
     const token = localStorage.getItem('token')
     if (!token) {
       axios.get(`articles/${slug}`)
-        .then(res => commit(LOAD_ARTICLE, res.data.articles))
-        .catch(error => {
-          throw error
+        .then(res => commit(LOAD_ARTICLE, res.data.article))
+        .catch(err => {
+          console.log(err)
         });
     } else {
       axios({

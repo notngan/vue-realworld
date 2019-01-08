@@ -31,24 +31,14 @@ import { mapActions, mapState } from 'vuex'
 export default {
   props: ['article'],
 
-  computed: {
-    ...mapState('auth', ['token'])
-  },
-
   methods: {
     ...mapActions('articles', ['addFavorite', 'removeFavorite']),
 
     onAddFavorite () {
       if (this.article.favorited) {
-        this.removeFavorite({
-          token: this.token,
-          slug: this.article.slug
-        })
+        this.removeFavorite(this.article.slug)
       } else {
-        this.addFavorite({
-          token: this.token,
-          slug: this.article.slug
-        })
+        this.addFavorite(this.article.slug)
       }
     }
   }
