@@ -40,6 +40,7 @@ export default {
       } else {
         this.addFavorite(this.article.slug)
       }
+      console.log(this.article.favorited)
     }
   }
 }

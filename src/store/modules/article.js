@@ -16,6 +16,7 @@ const state = {
 const mutations = {
   [LOAD_ARTICLE] (state, payload) {
     state.article = payload
+    // console.log(payload)
   },
 
   [LOAD_COMMENTS] (state, payload) {
