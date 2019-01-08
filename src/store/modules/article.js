@@ -5,7 +5,7 @@ import {
   ADD_FAVORITE_LOCAL,
   REMOVE_FAVORITE_LOCAL,
   FOLLOW_AUTHOR,
-  UNFOLLOW_AUTHOR
+  UNFOLLOW_AUTHOR,
 } from '../mutation-types'
 
 const state = {
@@ -101,10 +101,6 @@ const actions = {
       .catch(err => {
         throw err
       })
-  },
-
-  createArticle ({ commit }, article) {
-
   }
 
 }

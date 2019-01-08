@@ -55,6 +55,7 @@
 
 <script>
 import { required, minLength } from 'vuelidate/lib/validators'
+import { mapActions } from 'vuex'
 
 export default {
   data() {
@@ -85,6 +86,8 @@ export default {
   },
 
   methods: {
+    ...mapActions('articles', ['createArticle']),
+
     addTag () {
       if (this.tag == '') return
       this.tagList.push(this.tag)
@@ -101,7 +104,12 @@ export default {
         body: this.body,
         tagList: this.tagList
       }
-      console.log(article)
+      this.createArticle(article).then(() => {
+        this.title = ''
+        this.description = ''
+        this.tagList = []
+        this.body = ''
+      })
     }
   }
 }

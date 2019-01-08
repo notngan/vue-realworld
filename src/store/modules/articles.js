@@ -4,7 +4,8 @@ import router from '../../router'
 import {
   LOAD_ARTICLES,
   ADD_FAVORITE,
-  REMOVE_FAVORITE
+  REMOVE_FAVORITE,
+  CREATE_ARTICLE
 } from '../mutation-types'
 
 const state = {
@@ -26,6 +27,10 @@ const mutations = {
     const article = state.articleList.find(art => art.slug === payload)
     article.favorited = false
     article.favoritesCount -=1
+  },
+
+  [CREATE_ARTICLE] (state, payload) {
+    state.articleList.push(payload)
   }
 }
 
@@ -94,6 +99,26 @@ const actions = {
       })
       .catch(err => {
         throw err
+      })
+  },
+
+  createArticle ({ commit }, article) {
+    console.log(article)
+    axios({
+      method: 'post',
+      url: 'articles',
+      data: {
+        article: article
+      },
+      headers: {
+        Authorization: `Token ${localStorage.getItem('token')}`
+      }
+    })
+      .then(res => {
+        commit(CREATE_ARTICLE, res.data.article)
+      })
+      .catch(err => {
+        console.log(err)
       })
   }
 }
