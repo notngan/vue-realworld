@@ -16,10 +16,15 @@
           <button class="btn btn-sm btn-outline-secondary">
             <i class="ion-plus-round"></i>
             &nbsp;
-            Follow Eric Simons <span class="counter">(10)</span>
+            Follow {{ article.author.username }} <span class="counter">(10)</span>
           </button>
           &nbsp;&nbsp;
-          <button class="btn btn-sm btn-outline-primary">
+          <button
+            @click="onAddFavorite"
+            class="btn btn-sm"
+            :class="{
+              'btn-primary': article.favorited,
+              'btn-outline-primary': !article.favorited}">
             <i class="ion-heart"></i>
             &nbsp;
             Favorite Post <span class="counter">({{ article.favoritesCount }})</span>
@@ -48,17 +53,24 @@
           </router-link>
 
           <div class="info">
-            <a href="" class="author">Eric Simons</a>
+            <a href="" class="author">{{ article.author.username }}</a>
             <span class="date">{{ formatDate(article.createdAt) }}</span>
           </div>
 
+          <!-- follow -->
           <button class="btn btn-sm btn-outline-secondary">
             <i class="ion-plus-round"></i>
             &nbsp;
             Follow {{ article.author.username }} <span class="counter">(10)</span>
           </button>
           &nbsp;
-          <button class="btn btn-sm btn-outline-primary">
+          <!-- favorite -->
+          <button
+            @click="onAddFavorite"
+            class="btn btn-sm"
+            :class="{
+              'btn-primary': article.favorited,
+              'btn-outline-primary': !article.favorited}">
             <i class="ion-heart"></i>
             &nbsp;
             Favorite Post <span class="counter">({{ article.favoritesCount }})</span>
@@ -110,17 +122,32 @@ import { mapActions, mapState } from 'vuex'
 export default {
   computed: {
     ...mapState('article', ['commentList', 'article']),
-    ...mapState('auth', ['user'])
+    ...mapState('auth', ['user', 'token'])
   },
 
   methods: {
-    ...mapActions('article', ['loadComments', 'loadArticle'])
+    ...mapActions('article', ['loadComments', 'loadArticle']),
+    ...mapActions('articles', ['addFavorite', 'removeFavorite']),
+
+    onAddFavorite () {
+      if (this.article.favorited) {
+        this.removeFavorite({
+          token: this.token,
+          slug: this.article.slug
+        })
+      } else {
+        this.addFavorite({
+          token: this.token,
+          slug: this.article.slug
+        })
+      }
+      console.log(this.article.favorited)
+    }
   },
 
   created () {
     this.loadArticle(this.$route.params.id)
     this.loadComments(this.$route.params.id)
-    console.log(this.user)
   },
 }
 </script>
