@@ -62,13 +62,14 @@ export default {
   },
   computed: {
     ...mapState('articles', ['articleList']),
+    ...mapState('auth', ['token'])
   },
   methods: {
     ...mapActions('articles', ['loadArticles']),
   },
 
   created() {
-    this.loadArticles();
+    this.loadArticles(this.token);
   }
 }
 </script>

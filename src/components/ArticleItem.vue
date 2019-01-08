@@ -36,13 +36,20 @@ export default {
   },
 
   methods: {
-    ...mapActions('articles', ['addFavorite']),
+    ...mapActions('articles', ['addFavorite', 'removeFavorite']),
 
     onAddFavorite () {
-      this.addFavorite({
-        token: this.token,
-        slug: this.article.slug
-      })
+      if (this.article.favorited) {
+        this.removeFavorite({
+          token: this.token,
+          slug: this.article.slug
+        })
+      } else {
+        this.addFavorite({
+          token: this.token,
+          slug: this.article.slug
+        })
+      }
     }
   }
 }
