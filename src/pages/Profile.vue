@@ -64,7 +64,7 @@ export default {
   },
 
   created () {
-    this.fetchUser()
+    this.fetchUser(this.username)
     this.loadArticlesByAuthor(this.username)
   }
 }

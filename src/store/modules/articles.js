@@ -17,27 +17,15 @@ const mutations = {
   },
 
   [ADD_FAVORITE] (state, payload) {
-    const article = state.articleList.find(art => art.slug == payload)
-    for (let key in article) {
-      if (key == 'favorited') {
-        article[key] = true
-      }
-      if (key == 'favoritesCount') {
-        article[key] += 1
-      }
-    }
+    const article = state.articleList.find(art => art.slug === payload)
+    article.favorited = true
+    article.favoritesCount +=1
   },
 
   [REMOVE_FAVORITE] (state, payload) {
-    const article = state.articleList.find(art => art.slug == payload)
-    for (let key in article) {
-      if (key == 'favorited') {
-        article[key] = false
-      }
-      if (key == 'favoritesCount') {
-        article[key] -= 1
-      }
-    }
+    const article = state.articleList.find(art => art.slug === payload)
+    article.favorited = false
+    article.favoritesCount -=1
   }
 }
 
@@ -69,12 +57,12 @@ const actions = {
       })
   },
 
-  addFavorite ({ commit }, payload) {
+  addFavorite ({ commit }, slug) {
     axios({
       method: 'post',
-      url: `articles/${payload.slug}/favorite`,
+      url: `articles/${slug}/favorite`,
       headers: {
-        Authorization: `Token ${payload.token}`
+        Authorization: `Token ${localStorage.getItem('token')}`
       }
     })
       .then(res => {
@@ -89,12 +77,12 @@ const actions = {
       })
   },
 
-  removeFavorite ({ commit }, payload) {
+  removeFavorite ({ commit }, slug) {
     axios({
       method: 'delete',
-      url: `articles/${payload.slug}/favorite`,
+      url: `articles/${slug}/favorite`,
       headers: {
-        Authorization: `Token ${payload.token}`
+        Authorization: `Token ${localStorage.getItem('token')}`
       }
     })
       .then(res => {

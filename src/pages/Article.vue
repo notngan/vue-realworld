@@ -13,10 +13,18 @@
             <router-link :to="`/profile/${article.author.username}`" class="author" exact>{{ article.author.username }}</router-link>
             <span class="date">{{ formatDate(article.createdAt) }}</span>
           </div>
-          <button class="btn btn-sm btn-outline-secondary">
+          <!-- follow -->
+          <button
+            @click="onFollowAuthor"
+            class="btn btn-sm"
+            :class="{
+              'btn-secondary': article.author.following,
+              'btn-outline-secondary': !article.author.following}">
             <i class="ion-plus-round"></i>
             &nbsp;
-            Follow {{ article.author.username }} <span class="counter">(10)</span>
+            <span v-if="article.author.following">Unfollow</span>
+            <span v-else>Follow</span>
+            {{ article.author.username }}
           </button>
           &nbsp;&nbsp;
           <button
@@ -27,7 +35,9 @@
               'btn-outline-primary': !article.favorited}">
             <i class="ion-heart"></i>
             &nbsp;
-            Favorite Post <span class="counter">({{ article.favoritesCount }})</span>
+            <span v-if="article.favorited">Unfavorite</span>
+            <span v-else>Favorite</span>&nbsp;
+            <span class="counter">({{ article.favoritesCount }})</span>
           </button>
         </div>
 
@@ -53,15 +63,22 @@
           </router-link>
 
           <div class="info">
-            <a href="" class="author">{{ article.author.username }}</a>
+            <router-link  :to="`/profile/${article.author.username}`" class="author">{{ article.author.username }}</router-link>
             <span class="date">{{ formatDate(article.createdAt) }}</span>
           </div>
 
           <!-- follow -->
-          <button class="btn btn-sm btn-outline-secondary">
+          <button
+            @click="onFollowAuthor"
+            class="btn btn-sm"
+            :class="{
+              'btn-secondary': article.author.following,
+              'btn-outline-secondary': !article.author.following}">
             <i class="ion-plus-round"></i>
             &nbsp;
-            Follow {{ article.author.username }} <span class="counter">(10)</span>
+            <span v-if="article.author.following">Unfollow</span>
+            <span v-else>Follow</span>
+            {{ article.author.username }}
           </button>
           &nbsp;
           <!-- favorite -->
@@ -73,7 +90,9 @@
               'btn-outline-primary': !article.favorited}">
             <i class="ion-heart"></i>
             &nbsp;
-            Favorite Post <span class="counter">({{ article.favoritesCount }})</span>
+            <span v-if="article.favorited">Unfavorite</span>
+            <span v-else>Favorite</span>&nbsp;
+            <span class="counter">({{ article.favoritesCount }})</span>
           </button>
         </div>
       </div>
@@ -86,8 +105,10 @@
             <div class="card-block">
               <textarea class="form-control" placeholder="Write a comment..." rows="3"></textarea>
             </div>
-            <div class="card-footer">
-              <img v-if="user" :src="user.image" class="comment-author-img" />
+            <div v-if="user" class="card-footer">
+              <img :src="user.image" class="comment-author-img" />
+              &nbsp;
+              <router-link :to="`/profile/${user.username}`">{{ user.username }}</router-link>
               <button class="btn btn-sm btn-primary">
               Post Comment
               </button>
@@ -122,33 +143,37 @@ import { mapActions, mapState } from 'vuex'
 export default {
   computed: {
     ...mapState('article', ['commentList', 'article']),
-    ...mapState('auth', ['user', 'token'])
+    ...mapState('auth', ['user', 'username', 'token'])
   },
 
   methods: {
-    ...mapActions('article', ['loadComments', 'loadArticle']),
+    ...mapActions('article', ['loadComments', 'loadArticle', 'followAuthor', 'unfollowAuthor']),
     ...mapActions('articles', ['addFavorite', 'removeFavorite']),
+    ...mapActions('auth', ['fetchUser']),
 
     onAddFavorite () {
       if (this.article.favorited) {
-        this.removeFavorite({
-          token: this.token,
-          slug: this.article.slug
-        })
+        this.removeFavorite(this.article.slug)
       } else {
-        this.addFavorite({
-          token: this.token,
-          slug: this.article.slug
-        })
+        this.addFavorite(this.article.slug)
       }
-      console.log(this.article.favorited)
+    },
+
+    onFollowAuthor () {
+      if (this.article.author.following) {
+        this.unfollowAuthor(this.article.author.username)
+      } else {
+        this.followAuthor(this.article.author.username)
+      }
     }
   },
 
   created () {
+    if (!this.$route.params.id) return
     this.loadArticle(this.$route.params.id)
     this.loadComments(this.$route.params.id)
-  },
+    this.fetchUser(this.username)
+  }
 }
 </script>
 

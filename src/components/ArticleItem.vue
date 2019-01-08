@@ -50,7 +50,6 @@ export default {
           slug: this.article.slug
         })
       }
-      console.log(this.article.favorited)
     }
   }
 }
