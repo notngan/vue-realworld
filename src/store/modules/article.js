@@ -101,6 +101,10 @@ const actions = {
       .catch(err => {
         throw err
       })
+  },
+
+  createArticle ({ commit }, article) {
+
   }
 
 }
