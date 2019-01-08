@@ -77,17 +77,15 @@ const actions = {
     localStorage.clear()
   },
 
-  fetchUser ({ commit, state, dispatch }) {
-    if (!state.username) return
-    axios.get(`profiles/${state.username}`)
+  fetchUser ({ commit, dispatch }, username) {
+    axios.get(`profiles/${username}`)
       .then(res => {
-        //console.log(res.data.profile)
         commit(FETCH_USER, res.data.profile)
       })
       .catch(err => {
         dispatch('message/addMessage', err.response.data.errors, { root: true })
       })
-  }
+  },
 }
 
 export default {

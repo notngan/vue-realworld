@@ -26,29 +26,19 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   props: ['article'],
-
-  computed: {
-    ...mapState('auth', ['token'])
-  },
 
   methods: {
     ...mapActions('articles', ['addFavorite', 'removeFavorite']),
 
     onAddFavorite () {
       if (this.article.favorited) {
-        this.removeFavorite({
-          token: this.token,
-          slug: this.article.slug
-        })
+        this.removeFavorite(this.article.slug)
       } else {
-        this.addFavorite({
-          token: this.token,
-          slug: this.article.slug
-        })
+        this.addFavorite(this.article.slug)
       }
       console.log(this.article.favorited)
     }

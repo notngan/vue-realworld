@@ -4,7 +4,8 @@ import router from '../../router'
 import {
   LOAD_ARTICLES,
   ADD_FAVORITE,
-  REMOVE_FAVORITE
+  REMOVE_FAVORITE,
+  CREATE_ARTICLE
 } from '../mutation-types'
 
 const state = {
@@ -17,27 +18,19 @@ const mutations = {
   },
 
   [ADD_FAVORITE] (state, payload) {
-    const article = state.articleList.find(art => art.slug == payload)
-    for (let key in article) {
-      if (key == 'favorited') {
-        article[key] = true
-      }
-      if (key == 'favoritesCount') {
-        article[key] += 1
-      }
-    }
+    const article = state.articleList.find(art => art.slug === payload)
+    article.favorited = true
+    article.favoritesCount +=1
   },
 
   [REMOVE_FAVORITE] (state, payload) {
-    const article = state.articleList.find(art => art.slug == payload)
-    for (let key in article) {
-      if (key == 'favorited') {
-        article[key] = false
-      }
-      if (key == 'favoritesCount') {
-        article[key] -= 1
-      }
-    }
+    const article = state.articleList.find(art => art.slug === payload)
+    article.favorited = false
+    article.favoritesCount -=1
+  },
+
+  [CREATE_ARTICLE] (state, payload) {
+    state.articleList.push(payload)
   }
 }
 
@@ -69,12 +62,12 @@ const actions = {
       })
   },
 
-  addFavorite ({ commit }, payload) {
+  addFavorite ({ commit }, slug) {
     axios({
       method: 'post',
-      url: `articles/${payload.slug}/favorite`,
+      url: `articles/${slug}/favorite`,
       headers: {
-        Authorization: `Token ${payload.token}`
+        Authorization: `Token ${localStorage.getItem('token')}`
       }
     })
       .then(res => {
@@ -89,12 +82,12 @@ const actions = {
       })
   },
 
-  removeFavorite ({ commit }, payload) {
+  removeFavorite ({ commit }, slug) {
     axios({
       method: 'delete',
-      url: `articles/${payload.slug}/favorite`,
+      url: `articles/${slug}/favorite`,
       headers: {
-        Authorization: `Token ${payload.token}`
+        Authorization: `Token ${localStorage.getItem('token')}`
       }
     })
       .then(res => {
@@ -106,6 +99,26 @@ const actions = {
       })
       .catch(err => {
         throw err
+      })
+  },
+
+  createArticle ({ commit }, article) {
+    console.log(article)
+    axios({
+      method: 'post',
+      url: 'articles',
+      data: {
+        article: article
+      },
+      headers: {
+        Authorization: `Token ${localStorage.getItem('token')}`
+      }
+    })
+      .then(res => {
+        commit(CREATE_ARTICLE, res.data.article)
+      })
+      .catch(err => {
+        console.log(err)
       })
   }
 }
