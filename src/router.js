@@ -14,6 +14,14 @@ const router = new Router({
       component: Home
     },
     {
+      path: '/feed',
+      name: 'feed',
+      component: () => import('./pages/MyFeed'),
+      meta: {
+        authRequire: true
+      }
+    },
+    {
       path: '/signup',
       name: 'signup',
       component: () => import('./pages/SignUp')
@@ -48,15 +56,30 @@ const router = new Router({
       name: 'filteredArticles',
       props: (route) => ({
         tag: route.query.tag,
-        author: route.query.author
+        author: route.query.author,
+        favorited: route.query.favorited
       }),
       component: () => import ('./pages/FilteredArticles')
     }
   ]
 })
 
-// router.beforeEach((to, from, next) => {
-
-// })
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.authRequire)) {
+    if (!localStorage.getItem('token')) {
+      console.log(to)
+      next({
+        path: '/login',
+        query: {
+          redirect: to.fullPath
+        }
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
 
 export default router

@@ -40,9 +40,9 @@ const mutations = {
   }
 }
 
+const token = localStorage.getItem('token')
 const actions = {
   loadArticles ({ commit }) {
-    const token = localStorage.getItem('token')
     if (!token) {
       axios.get('articles')
         .then(res => commit(LOAD_ARTICLES, res.data.articles))
@@ -63,7 +63,6 @@ const actions = {
   },
 
   loadArticlesByAuthor ({ commit }, username) {
-    const token = localStorage.getItem('token')
     if (!token) {
       axios.get(`articles?author=${username}`)
         .then(res => commit(LOAD_ARTICLES, res.data.articles))
@@ -84,7 +83,6 @@ const actions = {
   },
 
   loadArticlesByTag ({ commit }, tag) {
-    const token = localStorage.getItem('token')
     if (!token) {
       axios.get(`articles?tag=${tag}`)
         .then(res => commit(LOAD_ARTICLES, res.data.articles))
@@ -102,6 +100,42 @@ const actions = {
         .then(res => commit(LOAD_ARTICLES, res.data.articles))
         .catch(err => { throw err })
     }
+  },
+
+  loadArticlesByFavorite ({ commit }, username) {
+    if (!token) {
+      axios.get(`articles?favorited=${username}`)
+        .then(res => commit(LOAD_ARTICLES, res.data.articles))
+        .catch(error => {
+          throw error
+        })
+    } else {
+      axios({
+        method: 'get',
+        url: `articles?favorited=${username}`,
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      })
+        .then(res => commit(LOAD_ARTICLES, res.data.articles))
+        .catch(err => { throw err })
+    }
+  },
+
+  loadFeedArticles ({ commit }) {
+    if (!token) return
+    axios({
+      method: 'get',
+      url: `articles/feed`,
+      headers: {
+        Authorization: `Token ${token}`
+      }
+    })
+      .then(res => {
+        commit(LOAD_ARTICLES, res.data.articles)
+        console.log(res.data.articles)
+      })
+      .catch(err => { throw err })
   },
 
   addFavorite ({ commit }, slug) {

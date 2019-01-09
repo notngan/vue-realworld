@@ -138,9 +138,6 @@
       </div>
 
     </div>
-
-    <global-message v-show="messages.length > 0"/>
-
   </div>
 </template>
 

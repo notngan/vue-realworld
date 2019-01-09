@@ -40,7 +40,10 @@
                   :to="`/profile/${user.username}`">My Articles</router-link>
               </li>
               <li class="nav-item">
-                <router-link class="nav-link" to="">Favorited Articles</router-link>
+                <router-link
+                  class="nav-link"
+                  :to="{ path: '/articles', query: {favorited: user.username} }"
+                >Favorited Articles</router-link>
               </li>
             </ul>
           </div>
