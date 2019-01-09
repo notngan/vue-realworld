@@ -21,8 +21,9 @@ export default {
   width: 100vw;
   position: fixed;
   bottom: 0;
-  background: #d65042;
+  background: #f9715e;
   padding: 6px 0;
   color: #fff;
+  z-index: 1000;
 }
 </style>

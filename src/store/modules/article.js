@@ -5,7 +5,7 @@ import {
   ADD_FAVORITE_LOCAL,
   REMOVE_FAVORITE_LOCAL,
   FOLLOW_AUTHOR,
-  UNFOLLOW_AUTHOR,
+  UNFOLLOW_AUTHOR
 } from '../mutation-types'
 
 const state = {
@@ -42,9 +42,11 @@ const mutations = {
   }
 }
 
+const token = localStorage.getItem('token')
+
 const actions = {
+
   loadArticle ({ commit }, slug) {
-    const token = localStorage.getItem('token')
     if (!token) {
       axios.get(`articles/${slug}`)
         .then(res => commit(LOAD_ARTICLE, res.data.article))
@@ -71,33 +73,40 @@ const actions = {
     })
   },
 
-  followAuthor ({ commit }, username) {
-    const token = localStorage.getItem('token')
+  followAuthor ({ commit }, payload) {
     axios({
       method: 'post',
-      url: `profiles/${username}/follow`,
+      url: `profiles/${payload.username}/follow`,
       headers: {
         Authorization: `Token ${token}`
       }
     })
       .then(() => {
-        commit(FOLLOW_AUTHOR)
+        if (payload.route !== 'profile') {
+          commit(FOLLOW_AUTHOR)
+        } else {
+          commit('auth/FOLLOW_USER', null, { root: true })
+        }
       })
       .catch(err => {
         throw err
       })
   },
 
-  unfollowAuthor ({ commit }, username) {
+  unfollowAuthor ({ commit }, payload) {
     axios({
       method: 'delete',
-      url: `profiles/${username}/follow`,
+      url: `profiles/${payload.username}/follow`,
       headers: {
-        Authorization: `Token ${localStorage.getItem('token')}`
+        Authorization: `Token ${token}`
       }
     })
       .then(() => {
-        commit(UNFOLLOW_AUTHOR)
+        if (payload.route !== 'profile') {
+          commit(UNFOLLOW_AUTHOR)
+        } else {
+          commit('auth/UNFOLLOW_USER', null, { root: true })
+        }
       })
       .catch(err => {
         throw err

@@ -45,9 +45,12 @@ const router = new Router({
     },
     {
       path: '/articles',
-      name: 'articles',
-      props: (route) => ({ query: route.query.tag}),
-      component: () => import ('./pages/ArticlesByTag')
+      name: 'filteredArticles',
+      props: (route) => ({
+        tag: route.query.tag,
+        author: route.query.author
+      }),
+      component: () => import ('./pages/FilteredArticles')
     }
   ]
 })

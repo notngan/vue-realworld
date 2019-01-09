@@ -18,6 +18,7 @@
             @click="onFollowAuthor"
             class="btn btn-sm"
             :class="{
+              'disabled': article.author.username === username,
               'btn-secondary': article.author.following,
               'btn-outline-secondary': !article.author.following}">
             <i class="ion-plus-round"></i>
@@ -31,6 +32,7 @@
             @click="onAddFavorite"
             class="btn btn-sm"
             :class="{
+              'disabled': article.author.username === username,
               'btn-primary': article.favorited,
               'btn-outline-primary': !article.favorited}">
             <i class="ion-heart"></i>
@@ -72,6 +74,7 @@
             @click="onFollowAuthor"
             class="btn btn-sm"
             :class="{
+              'disabled': article.author.username === username,
               'btn-secondary': article.author.following,
               'btn-outline-secondary': !article.author.following}">
             <i class="ion-plus-round"></i>
@@ -86,6 +89,7 @@
             @click="onAddFavorite"
             class="btn btn-sm"
             :class="{
+              'disabled': article.author.username === username,
               'btn-primary': article.favorited,
               'btn-outline-primary': !article.favorited}">
             <i class="ion-heart"></i>
@@ -162,6 +166,8 @@ export default {
     ...mapMutations('message', ['ADD_MESSAGE', 'CLEAR_MESSAGE']),
 
     onAddFavorite () {
+      if (this.username === this.article.author.username) return
+
       if (!localStorage.getItem('token')) {
         this.ADD_MESSAGE(['You need to login to continue.'])
         setTimeout(() => {
@@ -178,6 +184,8 @@ export default {
     },
 
     onFollowAuthor () {
+      if (this.username === this.article.author.username) return
+
       if (!localStorage.getItem('token')) {
         this.ADD_MESSAGE(['You need to login to continue.'])
         setTimeout(() => {
@@ -187,9 +195,15 @@ export default {
       }
 
       if (this.article.author.following) {
-        this.unfollowAuthor(this.article.author.username)
+        this.unfollowAuthor({
+          username: this.article.author.username,
+          route: this.$route.name
+        })
       } else {
-        this.followAuthor(this.article.author.username)
+        this.followAuthor({
+          username: this.article.author.username,
+          route: this.$route.name
+        })
       }
     }
   },
