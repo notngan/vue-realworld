@@ -89,7 +89,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import ArticleItem from '../components/ArticleItem'
+import ArticleItem from '../../components/ArticleItem'
 
 export default {
   components: {

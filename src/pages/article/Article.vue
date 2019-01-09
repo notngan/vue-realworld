@@ -13,34 +13,50 @@
             <router-link :to="`/profile/${article.author.username}`" class="author" exact>{{ article.author.username }}</router-link>
             <span class="date">{{ formatDate(article.createdAt) }}</span>
           </div>
-          <!-- follow -->
-          <button
-            @click="onFollowAuthor"
-            class="btn btn-sm"
-            :class="{
-              'disabled': article.author.username === username,
-              'btn-secondary': article.author.following,
-              'btn-outline-secondary': !article.author.following}">
-            <i class="ion-plus-round"></i>
-            &nbsp;
-            <span v-if="article.author.following">Unfollow</span>
-            <span v-else>Follow</span>
-            {{ article.author.username }}
-          </button>
-          &nbsp;&nbsp;
-          <button
-            @click="onAddFavorite"
-            class="btn btn-sm"
-            :class="{
-              'disabled': article.author.username === username,
-              'btn-primary': article.favorited,
-              'btn-outline-primary': !article.favorited}">
-            <i class="ion-heart"></i>
-            &nbsp;
-            <span v-if="article.favorited">Unfavorite</span>
-            <span v-else>Favorite</span>&nbsp;
-            <span class="counter">({{ article.favoritesCount }})</span>
-          </button>
+          <template v-if="article.author.username !== username">
+            <!-- follow -->
+            <button
+              @click="onFollowAuthor"
+              class="btn btn-sm"
+              :class="{
+                'disabled': article.author.username === username,
+                'btn-secondary': article.author.following,
+                'btn-outline-secondary': !article.author.following}">
+              <i class="ion-plus-round"></i>
+              &nbsp;
+              <span v-if="article.author.following">Unfollow</span>
+              <span v-else>Follow</span>
+              {{ article.author.username }}
+            </button>
+            &nbsp;&nbsp;
+            <button
+              @click="onAddFavorite"
+              class="btn btn-sm"
+              :class="{
+                'disabled': article.author.username === username,
+                'btn-primary': article.favorited,
+                'btn-outline-primary': !article.favorited}">
+              <i class="ion-heart"></i>
+              &nbsp;
+              <span v-if="article.favorited">Unfavorite</span>
+              <span v-else>Favorite</span>&nbsp;
+              <span class="counter">({{ article.favoritesCount }})</span>
+            </button>
+          </template>
+
+          <template v-else>
+            <router-link
+              :to="`/editor/${article.slug}`"
+              class="btn btn-sm btn-outline-secondary">
+              <i class="ion-edit"></i>
+              <span>&nbsp;Edit Article</span>
+            </router-link>
+            &nbsp;&nbsp;
+            <button class="btn btn-outline-danger btn-sm">
+              <i class="ion-trash-a"></i>
+              <span>&nbsp;Delete Article</span>
+            </button>
+          </template>
         </div>
 
       </div>
@@ -69,35 +85,52 @@
             <span class="date">{{ formatDate(article.createdAt) }}</span>
           </div>
 
-          <!-- follow -->
-          <button
-            @click="onFollowAuthor"
-            class="btn btn-sm"
-            :class="{
-              'disabled': article.author.username === username,
-              'btn-secondary': article.author.following,
-              'btn-outline-secondary': !article.author.following}">
-            <i class="ion-plus-round"></i>
+          <template v-if="article.author.username !== username">
+            <!-- follow -->
+            <button
+              @click="onFollowAuthor"
+              class="btn btn-sm"
+              :class="{
+                'disabled': article.author.username === username,
+                'btn-secondary': article.author.following,
+                'btn-outline-secondary': !article.author.following}">
+              <i class="ion-plus-round"></i>
+              &nbsp;
+              <span v-if="article.author.following">Unfollow</span>
+              <span v-else>Follow</span>
+              {{ article.author.username }}
+            </button>
             &nbsp;
-            <span v-if="article.author.following">Unfollow</span>
-            <span v-else>Follow</span>
-            {{ article.author.username }}
-          </button>
-          &nbsp;
-          <!-- favorite -->
-          <button
-            @click="onAddFavorite"
-            class="btn btn-sm"
-            :class="{
-              'disabled': article.author.username === username,
-              'btn-primary': article.favorited,
-              'btn-outline-primary': !article.favorited}">
-            <i class="ion-heart"></i>
-            &nbsp;
-            <span v-if="article.favorited">Unfavorite</span>
-            <span v-else>Favorite</span>&nbsp;
-            <span class="counter">({{ article.favoritesCount }})</span>
-          </button>
+            <!-- favorite -->
+            <button
+              @click="onAddFavorite"
+              class="btn btn-sm"
+              :class="{
+                'disabled': article.author.username === username,
+                'btn-primary': article.favorited,
+                'btn-outline-primary': !article.favorited}">
+              <i class="ion-heart"></i>
+              &nbsp;
+              <span v-if="article.favorited">Unfavorite</span>
+              <span v-else>Favorite</span>&nbsp;
+              <span class="counter">({{ article.favoritesCount }})</span>
+            </button>
+          </template>
+
+          <template v-else>
+            <router-link
+              :to="`/editor/${article.slug}`"
+              class="btn btn-sm btn-outline-secondary">
+              <i class="ion-edit"></i>
+              <span>&nbsp;Edit Article</span>
+            </router-link>
+            &nbsp;&nbsp;
+            <button class="btn btn-outline-danger btn-sm">
+              <i class="ion-trash-a"></i>
+              <span>&nbsp;Delete Article</span>
+            </button>
+          </template>
+
         </div>
       </div>
 
@@ -143,13 +176,8 @@
 
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex'
-import GlobalMessage from '../components/GlobalMessage'
 
 export default {
-  components: {
-    GlobalMessage
-  },
-
   computed: {
     ...mapState('article', ['commentList', 'article']),
     ...mapState('auth', ['user', 'username', 'token']),

@@ -33,8 +33,19 @@ const router = new Router({
     },
     {
       path: '/editor',
-      name: 'editor',
-      component: () => import('./pages/Editor')
+      name: 'createArticle',
+      component: () => import('./pages/Editor'),
+      meta: {
+        authRequire: true
+      }
+    },
+    {
+      path: '/editor/:id',
+      name: 'editArticle',
+      component: () => import('./pages/article/EditArticle'),
+      meta: {
+        authRequire: true
+      }
     },
     {
       path: '/profile/:id',
@@ -44,22 +55,25 @@ const router = new Router({
     {
       path: '/article/:id',
       name: 'article',
-      component: () => import('./pages/Article')
+      component: () => import('./pages/article/Article')
+    },
+    {
+      path: '/articles',
+      name: 'tagArticles',
+      props: (route) => ({
+        tag: route.query.tag
+      }),
+      component: () => import ('./pages/article/TagArticles')
+    },
+    {
+      path: '/profile/:id/favorites',
+      name: 'favorites',
+      component: () => import ('./pages/article/FavoriteArticles')
     },
     {
       path: '/settings',
       name: 'settings',
       component: () => import('./pages/Settings')
-    },
-    {
-      path: '/articles',
-      name: 'filteredArticles',
-      props: (route) => ({
-        tag: route.query.tag,
-        author: route.query.author,
-        favorited: route.query.favorited
-      }),
-      component: () => import ('./pages/FilteredArticles')
     }
   ]
 })
@@ -67,7 +81,6 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.authRequire)) {
     if (!localStorage.getItem('token')) {
-      console.log(to)
       next({
         path: '/login',
         query: {

@@ -133,7 +133,6 @@ const actions = {
     })
       .then(res => {
         commit(LOAD_ARTICLES, res.data.articles)
-        console.log(res.data.articles)
       })
       .catch(err => { throw err })
   },
