@@ -15,10 +15,14 @@
           <div class="feed-toggle">
             <ul class="nav nav-pills outline-active">
               <li class="nav-item">
-                <a class="nav-link disabled" href="">Your Feed</a>
+                <router-link class="nav-link active" to="/">Global Feed</router-link>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="">Global Feed</a>
+                <router-link
+                  class="nav-link"
+                  :to="{ path: 'articles', query: {author: username} }">
+                  Your Feed
+                </router-link>
               </li>
             </ul>
           </div>
@@ -60,7 +64,7 @@ export default {
 
   computed: {
     ...mapState('articles', ['articleList', 'tagList']),
-    ...mapState('auth', ['token'])
+    ...mapState('auth', ['token', 'username'])
   },
 
   methods: {
