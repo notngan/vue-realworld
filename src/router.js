@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './pages/Home.vue'
-import store from './store/store'
+import Home from './pages/Home'
 
 Vue.use(Router)
 
@@ -17,34 +16,44 @@ const router = new Router({
     {
       path: '/signup',
       name: 'signup',
-      component: () => import('./pages/SignUp.vue')
+      component: () => import('./pages/SignUp')
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('./pages/Login.vue')
+      component: () => import('./pages/Login')
     },
     {
       path: '/editor',
       name: 'editor',
-      component: () => import('./pages/Editor.vue')
+      component: () => import('./pages/Editor')
     },
     {
       path: '/profile/:id',
       name: 'profile',
-      component: () => import('./pages/Profile.vue')
+      component: () => import('./pages/Profile')
     },
     {
       path: '/article/:id',
       name: 'article',
-      component: () => import('./pages/Article.vue')
+      component: () => import('./pages/Article')
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: () => import('./pages/Settings')
+    },
+    {
+      path: '/articles',
+      name: 'articles',
+      props: (route) => ({ query: route.query.tag}),
+      component: () => import ('./pages/ArticlesByTag')
     }
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  store.dispatch('message/clearMessage')
-  next()
-})
+// router.beforeEach((to, from, next) => {
+
+// })
 
 export default router
