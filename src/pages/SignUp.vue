@@ -9,10 +9,6 @@
             <router-link to="/login">Have an account?</router-link>
           </p>
 
-          <ul class="error-messages">
-            <li v-for="(message, index) in messages" :key="index">{{ message }}</li>
-          </ul>
-
           <form @submit.prevent="onSignup">
             <fieldset class="form-group">
               <input v-model="userData.username" class="form-control form-control-lg" type="text" placeholder="Your Name">
@@ -45,10 +41,6 @@ export default {
         password: null
       }
     }
-  },
-
-  computed: {
-    ...mapState('message', ['messages'])
   },
 
   methods: {

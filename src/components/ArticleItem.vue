@@ -14,7 +14,8 @@
         :class="{
           'disabled': article.author.username === username,
           'btn-primary': article.favorited,
-          'btn-outline-primary': !article.favorited}">
+          'btn-outline-primary': !article.favorited
+        }">
         <i class="ion-heart"></i> {{ article.favoritesCount }}
       </button>
     </div>
@@ -27,7 +28,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 
 export default {
   props: ['article'],
@@ -38,8 +39,17 @@ export default {
 
   methods: {
     ...mapActions('articles', ['addFavorite', 'removeFavorite']),
+    ...mapMutations('message', ['ADD_MESSAGE', 'CLEAR_MESSAGE']),
 
     onAddFavorite () {
+      if (!localStorage.getItem('token')) {
+        this.ADD_MESSAGE(['You need to login to continue.'])
+        setTimeout(() => {
+          this.CLEAR_MESSAGE()
+        }, 3000);
+        return
+      }
+
       if (this.username === this.article.author.username) return
 
       if (this.article.favorited) {
@@ -47,7 +57,6 @@ export default {
       } else {
         this.addFavorite(this.article.slug)
       }
-      console.log(this.article.favorited)
     }
   }
 }

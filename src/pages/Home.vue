@@ -64,7 +64,7 @@ export default {
 
   computed: {
     ...mapState('articles', ['articleList', 'tagList']),
-    ...mapState('auth', ['token', 'username'])
+    ...mapState('auth', ['username'])
   },
 
   methods: {
@@ -72,7 +72,7 @@ export default {
   },
 
   created() {
-    this.loadArticles(this.token);
+    this.loadArticles();
     this.loadTags()
   }
 }

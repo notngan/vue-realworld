@@ -3,7 +3,9 @@ import router from '../../router'
 
 import {
   AUTH_USER,
-  FETCH_USER
+  FETCH_USER,
+  FOLLOW_USER,
+  UNFOLLOW_USER
 } from '../mutation-types'
 
 const state = {
@@ -20,8 +22,18 @@ const mutations = {
 
   [FETCH_USER] (state, payload) {
     state.user = payload
+  },
+
+  [FOLLOW_USER] (state) {
+    state.user.following = true
+  },
+
+  [UNFOLLOW_USER] (state) {
+    state.user.following = false
   }
 }
+
+const token = localStorage.getItem('token')
 
 const actions = {
   signup ({ commit, dispatch }, userData) {
@@ -39,6 +51,9 @@ const actions = {
       })
       .catch(err => {
         dispatch('message/addMessage', err.response.data.errors, { root: true })
+        setTimeout(() => {
+          dispatch('message/clearMessage', null, { root: true })
+        }, 3000);
       })
   },
 
@@ -57,6 +72,9 @@ const actions = {
       })
       .catch(err => {
         dispatch('message/addMessage', err.response.data.errors, { root: true })
+        setTimeout(() => {
+          dispatch('message/clearMessage', null, { root: true })
+        }, 3000);
       })
   },
 
@@ -78,13 +96,29 @@ const actions = {
   },
 
   fetchUser ({ commit, dispatch }, username) {
-    axios.get(`profiles/${username}`)
+    if (!token) {
+      axios.get(`profiles/${username}`)
+        .then(res => {
+          commit(FETCH_USER, res.data.profile)
+        })
+        .catch(err => {
+          dispatch('message/addMessage', err.response.data.errors, { root: true })
+        })
+    } else {
+      axios({
+        method: 'get',
+        url: `profiles/${username}`,
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      })
       .then(res => {
         commit(FETCH_USER, res.data.profile)
       })
       .catch(err => {
         dispatch('message/addMessage', err.response.data.errors, { root: true })
       })
+    }
   },
 }
 

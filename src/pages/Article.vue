@@ -195,9 +195,15 @@ export default {
       }
 
       if (this.article.author.following) {
-        this.unfollowAuthor(this.article.author.username)
+        this.unfollowAuthor({
+          username: this.article.author.username,
+          route: this.$route.name
+        })
       } else {
-        this.followAuthor(this.article.author.username)
+        this.followAuthor({
+          username: this.article.author.username,
+          route: this.$route.name
+        })
       }
     }
   },

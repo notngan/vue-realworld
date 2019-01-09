@@ -9,10 +9,18 @@
             <img :src="user.image" class="user-img" />
             <h4>{{ user.username }}</h4>
             <p>{{ user.bio }}</p>
-            <button class="btn btn-sm btn-outline-secondary action-btn">
+            <button
+              class="btn btn-sm action-btn"
+              :class="{
+              'disabled': user.username === username,
+              'btn-secondary': user.following,
+              'btn-outline-secondary': !user.following}"
+              @click="onFollowUser">
               <i class="ion-plus-round"></i>
               &nbsp;
-              Follow {{ user.username }}
+              <span v-if="user.following">Unfollow</span>
+              <span v-else>Follow</span>
+              {{ user.username }}
             </button>
           </div>
 
@@ -27,16 +35,19 @@
           <div class="articles-toggle">
             <ul class="nav nav-pills outline-active">
               <li class="nav-item">
-                <a class="nav-link active" href="">My Articles</a>
+                <router-link
+                  class="nav-link active"
+                  :to="`/profile/${user.username}`">My Articles</router-link>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="">Favorited Articles</a>
+                <router-link class="nav-link" to="">Favorited Articles</router-link>
               </li>
             </ul>
           </div>
 
           <article-item
-            v-for="article in articleList" :key="article.slug"
+            v-for="article in articleList"
+            :key="article.slug"
             :article="article"/>
         </div>
       </div>
@@ -60,13 +71,47 @@ export default {
 
   methods: {
     ...mapActions('auth', ['fetchUser']),
-    ...mapActions('articles', ['loadArticlesByAuthor'])
+    ...mapActions('articles', ['loadArticlesByAuthor']),
+    ...mapActions('article', ['followAuthor', 'unfollowAuthor']),
+
+    onFollowUser () {
+      if (this.username === this.user.username) return
+
+      if (!localStorage.getItem('token')) {
+        this.ADD_MESSAGE(['You need to login to continue.'])
+        setTimeout(() => {
+          this.CLEAR_MESSAGE()
+        }, 3000);
+        return
+      }
+
+      if (this.user.following) {
+        this.unfollowAuthor({
+          username: this.user.username,
+          route: this.$route.name
+        })
+      } else {
+        this.followAuthor({
+          username: this.user.username,
+          route: this.$route.name
+        })
+      }
+    }
   },
 
   created () {
-    this.fetchUser(this.username)
-    this.loadArticlesByAuthor(this.username)
-  }
+    this.fetchUser(this.$route.params.id)
+    this.loadArticlesByAuthor(this.$route.params.id)
+  },
+
+  watch: {
+    $route (prev, next) {
+      if (prev.params.id !== next.params.id) {
+        this.fetchUser(this.$route.params.id)
+        this.loadArticlesByAuthor(this.$route.params.id)
+      }
+    }
+  },
 }
 </script>
 
