@@ -5,11 +5,13 @@ import {
   LOAD_ARTICLES,
   ADD_FAVORITE,
   REMOVE_FAVORITE,
-  CREATE_ARTICLE
+  CREATE_ARTICLE,
+  LOAD_TAGS
 } from '../mutation-types'
 
 const state = {
   articleList: [],
+  tagList: []
 }
 
 const mutations = {
@@ -31,6 +33,10 @@ const mutations = {
 
   [CREATE_ARTICLE] (state, payload) {
     state.articleList.push(payload)
+  },
+
+  [LOAD_TAGS] (state, payload) {
+    state.tagList = payload
   }
 }
 
@@ -51,11 +57,20 @@ const actions = {
         }
       })
         .then(res => commit(LOAD_ARTICLES, res.data.articles))
+        .catch(err => { throw err })
     }
   },
 
   loadArticlesByAuthor ({ commit }, username) {
     axios.get(`articles?author=${username}`)
+      .then(res => commit(LOAD_ARTICLES, res.data.articles))
+      .catch(error => {
+        throw error
+      })
+  },
+
+  loadArticlesByTag ({ commit }, tag) {
+    axios.get(`articles?tag=${tag}`)
       .then(res => commit(LOAD_ARTICLES, res.data.articles))
       .catch(error => {
         throw error
@@ -120,7 +135,16 @@ const actions = {
       .catch(err => {
         console.log(err)
       })
-  }
+  },
+
+  loadTags ({ commit }) {
+    axios.get('tags')
+      .then(res => {
+        commit(LOAD_TAGS, res.data.tags)
+      })
+      .catch(err => { throw err })
+  },
+
 }
 
 export default {

@@ -60,16 +60,23 @@ export default {
 
   computed: {
     ...mapState('articles', ['articleList', 'tagList']),
-    ...mapState('auth', ['token'])
   },
 
   methods: {
-    ...mapActions('articles', ['loadArticles', 'loadTags']),
+    ...mapActions('articles', ['loadArticlesByTag', 'loadTags'])
   },
 
   created() {
-    this.loadArticles(this.token);
+    this.loadArticlesByTag(this.$route.query.tag)
     this.loadTags()
-  }
+  },
+
+  watch: {
+    $route (prev, next) {
+      if (prev.query.tag !== next.query.tag) {
+        this.loadArticlesByTag(this.$route.query.tag)
+      }
+    }
+  },
 }
 </script>
