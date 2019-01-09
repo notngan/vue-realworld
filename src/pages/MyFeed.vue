@@ -15,18 +15,19 @@
           <div class="feed-toggle">
             <ul class="nav nav-pills outline-active">
               <li class="nav-item">
-                <router-link class="nav-link" to="/feed">
+                <router-link class="nav-link active" to="/feed">
                   Your Feed
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link class="nav-link active" to="/">Global Feed</router-link>
+                <router-link class="nav-link" to="/">Global Feed</router-link>
               </li>
             </ul>
           </div>
 
           <article-item
-            v-for="article in articleList" :key="article.slug"
+            v-for="article in articleList"
+            :key="article.slug"
             :article="article"/>
 
         </div>
@@ -61,24 +62,17 @@ export default {
   },
 
   computed: {
-    ...mapState('articles', ['articleList', 'tagList']),
-    ...mapState('auth', ['username'])
+    ...mapState('articles', ['articleList', 'tagList'])
   },
 
   methods: {
-    ...mapActions('articles', ['loadArticles', 'loadTags']),
+    ...mapActions('articles', ['loadFeedArticles', 'loadTags']),
   },
 
   created() {
-    this.loadArticles();
+    this.loadFeedArticles();
     this.loadTags()
   },
-
-  watch: {
-    $route (prev, next) {
-      console.log(prev, next)
-    }
-  },
-
 }
 </script>
+
