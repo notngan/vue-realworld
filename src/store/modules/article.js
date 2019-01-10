@@ -18,7 +18,6 @@ const state = {
 const mutations = {
   [LOAD_ARTICLE] (state, payload) {
     state.article = payload
-    // console.log(payload)
   },
 
   [LOAD_COMMENTS] (state, payload) {
@@ -111,7 +110,7 @@ const actions = {
         Authorization: `Token ${token}`
       }
     })
-      .then(res => {
+      .then(() => {
         commit(DELETE_COMMENT, payload.id)
       })
       .catch(err => {
