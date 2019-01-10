@@ -10,7 +10,7 @@
             <h4>{{ user.username }}</h4>
             <p>{{ user.bio }}</p>
             <button
-              v-if="username !== user.username"
+              v-if="currentUser.username !== user.username"
               class="btn btn-sm action-btn"
               :class="{
               'btn-secondary': user.following,
@@ -23,7 +23,7 @@
               {{ user.username }}
             </button>
             <router-link
-              v-if="username == user.username"
+              v-if="currentUser.username == user.username"
               to="/settings"
               class="btn btn-sm btn-outline-secondary action-btn">
               <i class="ion-gear-a"></i> Edit Profile Settings
@@ -73,7 +73,7 @@ export default {
     ArticleItem
   },
   computed: {
-    ...mapState('auth', ['user', 'username']),
+    ...mapState('auth', ['currentUser', 'user']),
     ...mapState('articles', ['articleList'])
   },
 
@@ -84,7 +84,7 @@ export default {
     ...mapMutations('message', ['ADD_MESSAGE', 'CLEAR_MESSAGE']),
 
     onFollowUser () {
-      if (this.username === this.user.username) return
+      if (this.currentUser.username === this.user.username) return
 
       if (!localStorage.getItem('token')) {
         this.ADD_MESSAGE(['You need to login to continue.'])

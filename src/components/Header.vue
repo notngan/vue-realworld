@@ -6,17 +6,7 @@
         <li class="nav-item">
           <router-link class="nav-link" to="/">Home</router-link>
         </li>
-        <li class="nav-item">
-          <router-link class="nav-link" to="/editor">
-            <i class="ion-compose"></i>&nbsp;New Post
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/settings" class="nav-link">
-            <i class="ion-gear-a"></i>&nbsp;Settings
-          </router-link>
-        </li>
-        <template v-if="!token">
+        <template v-if="!currentUser">
           <li class="nav-item">
             <router-link class="nav-link" to="/signup">Signup</router-link>
           </li>
@@ -25,8 +15,18 @@
           </li>
         </template>
         <template v-else>
+           <li class="nav-item">
+            <router-link class="nav-link" to="/editor">
+              <i class="ion-compose"></i>&nbsp;New Post
+            </router-link>
+          </li>
           <li class="nav-item">
-            <router-link class="nav-link" :to="`/profile/${username}`">{{ username }}</router-link>
+            <router-link to="/settings" class="nav-link">
+              <i class="ion-gear-a"></i>&nbsp;Settings
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" :to="`/profile/${currentUser.username}`">{{ currentUser.username }}</router-link>
           </li>
           <li class="nav-item">
             <button class="btn btn-outline-secondary btn-sm" @click="onLogout" style="margin-top: 6px;">Logout</button>
@@ -42,16 +42,20 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   computed: {
-    ...mapState('auth', ['token', 'username'])
+    ...mapState('auth', ['currentUser'])
   },
 
   methods: {
-    ...mapActions('auth', ['logout']),
+    ...mapActions('auth', ['logout', 'getCurrentUser']),
 
     onLogout () {
       this.logout()
     }
-  }
+  },
+
+  created() {
+    this.getCurrentUser()
+  },
 }
 </script>
 

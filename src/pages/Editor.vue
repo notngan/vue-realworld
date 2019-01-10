@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 import CreateForm from '../components/ArticleForm'
 
 export default {
@@ -37,13 +37,32 @@ export default {
     }
   },
 
+  computed: {
+    ...mapState('auth', ['currentUser'])
+  },
+
   methods: {
     ...mapActions('articles', ['createArticle']),
+    ...mapActions('auth', ['getCurrentUser']),
+    ...mapMutations('message', ['ADD_MESSAGE', 'CLEAR_MESSAGE']),
 
     onCreateArticle () {
       this.createArticle(this.article)
+      this.getCurrentUser()
     }
-  }
+  },
+
+  watch: {
+    currentUser (val) {
+      if (!val) {
+        this.$router.push('/login')
+        this.ADD_MESSAGE(['You need to login to continue!'])
+        setTimeout(() => {
+          this.CLEAR_MESSAGE()
+        }, 5000);
+      }
+    }
+  },
 }
 </script>
 
