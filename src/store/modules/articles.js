@@ -6,7 +6,9 @@ import {
   ADD_FAVORITE,
   REMOVE_FAVORITE,
   CREATE_ARTICLE,
-  LOAD_TAGS
+  LOAD_TAGS,
+  UPDATE_ARTICLE,
+  DELETE_ARTICLE
 } from '../mutation-types'
 
 const state = {
@@ -37,6 +39,16 @@ const mutations = {
 
   [LOAD_TAGS] (state, payload) {
     state.tagList = payload
+  },
+
+  [UPDATE_ARTICLE] (state, payload) {
+    let article = state.articleList.find(art => art.slug === payload.slug)
+    article = Object.assign({}, payload)
+  },
+
+  [DELETE_ARTICLE] (state, payload) {
+    let article = state.articleList.find(art => art.slug === payload)
+    article = null
   }
 }
 
@@ -196,9 +208,44 @@ const actions = {
     })
       .then(res => {
         commit(CREATE_ARTICLE, res.data.article)
+        router.push(`article/${res.data.article.slug}`)
       })
       .catch(err => {
         throw err
+      })
+  },
+
+  updateArticle ({ commit }, payload) {
+    axios({
+      method: 'put',
+      url: `articles/${payload.slug}`,
+      data: {
+        article: payload.article
+      },
+      headers: {
+        Authorization: `Token ${localStorage.getItem('token')}`
+      }
+    })
+      .then(res => {
+        commit(UPDATE_ARTICLE, res.data.article)
+        router.push(`/article/${res.data.article.slug}`)
+      })
+  },
+
+  deleteArticle ({ commit }, payload) {
+    axios({
+      method: 'delete',
+      url: `articles/${payload.slug}`,
+      headers: {
+        Authorization: `Token ${localStorage.getItem('token')}`
+      }
+    })
+      .then(res => {
+        commit(DELETE_ARTICLE, payload.slug)
+        router.push(`/profile/${payload.username}`)
+      })
+      .catch(err => {
+        console.log(err)
       })
   },
 

@@ -52,7 +52,7 @@
               <span>&nbsp;Edit Article</span>
             </router-link>
             &nbsp;&nbsp;
-            <button class="btn btn-outline-danger btn-sm">
+            <button @click="onDeleteArticle" class="btn btn-outline-danger btn-sm">
               <i class="ion-trash-a"></i>
               <span>&nbsp;Delete Article</span>
             </button>
@@ -125,7 +125,7 @@
               <span>&nbsp;Edit Article</span>
             </router-link>
             &nbsp;&nbsp;
-            <button class="btn btn-outline-danger btn-sm">
+            <button @click="onDeleteArticle" class="btn btn-outline-danger btn-sm">
               <i class="ion-trash-a"></i>
               <span>&nbsp;Delete Article</span>
             </button>
@@ -186,7 +186,7 @@ export default {
 
   methods: {
     ...mapActions('article', ['loadComments', 'loadArticle', 'followAuthor', 'unfollowAuthor']),
-    ...mapActions('articles', ['addFavorite', 'removeFavorite']),
+    ...mapActions('articles', ['addFavorite', 'removeFavorite', 'deleteArticle']),
     ...mapActions('auth', ['fetchUser']),
     ...mapMutations('message', ['ADD_MESSAGE', 'CLEAR_MESSAGE']),
 
@@ -230,6 +230,13 @@ export default {
           route: this.$route.name
         })
       }
+    },
+
+    onDeleteArticle () {
+      this.deleteArticle({
+        slug: this.article.slug,
+        username: this.article.author.username
+      })
     }
   },
 

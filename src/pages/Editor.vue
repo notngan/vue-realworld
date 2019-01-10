@@ -41,14 +41,7 @@ export default {
     ...mapActions('articles', ['createArticle']),
 
     onCreateArticle () {
-      this.createArticle(this.article).then(() => {
-        this.article = {
-          title: '',
-          description: '',
-          body: '',
-          tagList: [],
-        }
-      })
+      this.createArticle(this.article)
     }
   }
 }
