@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './pages/Home'
+import store from './store/store'
 
 Vue.use(Router)
 
@@ -73,6 +74,9 @@ const router = new Router({
     {
       path: '/settings',
       name: 'settings',
+      meta: {
+        authRequire: true
+      },
       component: () => import('./pages/Settings')
     }
   ]
@@ -87,10 +91,16 @@ router.beforeEach((to, from, next) => {
           redirect: to.fullPath
         }
       })
+      store.commit('message/ADD_MESSAGE', ['You need to login to continue!'])
+      setTimeout(() => {
+        store.commit('message/CLEAR_MESSAGE')
+      }, 5000);
     } else {
+      store.commit('message/CLEAR_MESSAGE')
       next()
     }
   } else {
+    store.commit('message/CLEAR_MESSAGE')
     next()
   }
 })

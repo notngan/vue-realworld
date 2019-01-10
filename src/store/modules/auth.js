@@ -5,13 +5,13 @@ import {
   AUTH_USER,
   FETCH_USER,
   FOLLOW_USER,
-  UNFOLLOW_USER
+  UNFOLLOW_USER,
+  SET_CURRENT_USER
 } from '../mutation-types'
 
 const state = {
   user: null,
-  username: null,
-  token: null
+  currentUser: null
 }
 
 const mutations = {
@@ -30,6 +30,10 @@ const mutations = {
 
   [UNFOLLOW_USER] (state) {
     state.user.following = false
+  },
+
+  [SET_CURRENT_USER] (state, payload) {
+    state.currentUser = payload
   }
 }
 
@@ -39,14 +43,9 @@ const actions = {
   signup ({ commit, dispatch }, userData) {
     axios.post('users', { user: userData })
       .then(res => {
-        const username = res.data.user.username
         const token = res.data.user.token
-        localStorage.setItem('username', username)
         localStorage.setItem('token', token)
-        commit(AUTH_USER, {
-          username: username,
-          token: token
-        })
+        commit(SET_CURRENT_USER, res.data.user)
         router.push('/')
       })
       .catch(err => {
@@ -60,14 +59,9 @@ const actions = {
   login ({ commit, dispatch }, userData) {
     axios.post('users/login', { user: userData })
       .then(res => {
-        const username = res.data.user.username
         const token = res.data.user.token
-        localStorage.setItem('username', username)
         localStorage.setItem('token', token)
-        commit(AUTH_USER, {
-          username: username,
-          token: token
-        })
+        commit(SET_CURRENT_USER, res.data.user)
         router.push('/')
       })
       .catch(err => {
@@ -78,20 +72,12 @@ const actions = {
       })
   },
 
-  autoLogin ({ commit }) {
-    const token = localStorage.getItem('token')
-    const username = localStorage.getItem('username')
-    commit(AUTH_USER, {
-      username: username,
-      token: token
-    })
+  autoLogin ({ dispatch }) {
+    dispatch('getCurrentUser')
   },
 
   logout ({ commit }) {
-    commit(AUTH_USER, {
-      username: null,
-      token: null
-    })
+    commit(SET_CURRENT_USER, null)
     localStorage.clear()
   },
 
@@ -120,6 +106,37 @@ const actions = {
       })
     }
   },
+
+  getCurrentUser ({ commit }) {
+    if (!token) return
+    axios({
+      method: 'get',
+      url: 'user',
+      headers: {
+        Authorization: `Token ${token}`
+      }
+    })
+      .then(res => commit(SET_CURRENT_USER, res.data.user))
+      .catch(err => {
+        throw err
+      })
+  },
+
+  updateUser ({ commit }, user) {
+    axios({
+      method: 'put',
+      url: 'user',
+      data: user,
+      headers: {
+        Authorization: `Token ${token}`
+      }
+    })
+      .then(res => {
+        commit(SET_CURRENT_USER, res.data.user)
+        router.push(`/profile/${res.data.user.username}`)
+      })
+      .catch(err => console.log(err.response.errors))
+  }
 }
 
 export default {
