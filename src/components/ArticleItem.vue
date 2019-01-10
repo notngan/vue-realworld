@@ -29,11 +29,14 @@
 
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex'
+import mixin from '../mixin'
 
 export default {
   props: {
     article: Object
   },
+
+  mixins: [mixin],
 
   computed: {
     ...mapState('auth', ['currentUser'])
