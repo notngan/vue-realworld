@@ -8,7 +8,7 @@
         <h1>{{ article.title }}</h1>
 
         <div class="article-meta">
-          <router-link :to="`profile/${article.author.username}`"><img :src="article.author.image" /></router-link>
+          <router-link :to="`/profile/${article.author.username}`"><img :src="article.author.image" /></router-link>
           <div class="info">
             <router-link :to="`/profile/${article.author.username}`" class="author" exact>{{ article.author.username }}</router-link>
             <span class="date">{{ formatDate(article.createdAt) }}</span>
@@ -200,9 +200,15 @@ export default {
       if (this.article.author.username === this.currentUser.username) return
 
       if (this.article.favorited) {
-        this.removeFavorite(this.article.slug)
+        this.removeFavorite({
+          slug: this.article.slug,
+          route: this.$route.name
+        })
       } else {
-        this.addFavorite(this.article.slug)
+        this.addFavorite({
+          slug: this.article.slug,
+          route: this.$route.name
+        })
       }
     },
 

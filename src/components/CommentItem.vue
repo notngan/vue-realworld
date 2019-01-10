@@ -25,7 +25,9 @@
 import { mapState } from 'vuex'
 
 export default {
-  props: ['comment'],
+  props: {
+    comment: Object
+  },
 
   computed: {
     ...mapState('auth', ['username'])

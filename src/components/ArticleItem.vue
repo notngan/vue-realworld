@@ -12,7 +12,7 @@
         @click="onAddFavorite"
         class="btn btn-sm pull-xs-right"
         :class="{
-          'disabled': article.author.username === username,
+          'disabled': article.author.username === currentUser.username,
           'btn-primary': article.favorited,
           'btn-outline-primary': !article.favorited
         }">
@@ -31,10 +31,12 @@
 import { mapActions, mapState, mapMutations } from 'vuex'
 
 export default {
-  props: ['article'],
+  props: {
+    article: Object
+  },
 
   computed: {
-    ...mapState('auth', ['username'])
+    ...mapState('auth', ['currentUser'])
   },
 
   methods: {
@@ -51,12 +53,18 @@ export default {
         return
       }
 
-      if (this.username === this.article.author.username) return
+      if (this.currentUser.username === this.article.author.username) return
 
       if (this.article.favorited) {
-        this.removeFavorite(this.article.slug)
+        this.removeFavorite({
+          slug: this.article.slug,
+          route: this.$route.name
+        })
       } else {
-        this.addFavorite(this.article.slug)
+        this.addFavorite({
+          slug: this.article.slug,
+          route: this.$route.name
+        })
       }
     }
   }
