@@ -47,8 +47,9 @@ const mutations = {
   },
 
   [DELETE_ARTICLE] (state, payload) {
-    let article = state.articleList.find(art => art.slug === payload)
-    article = null
+    const article = state.articleList.find(art => art.slug === payload)
+    const index = state.articleList.indexOf(article)
+    state.articleList.splice(index, 1)
   }
 }
 
@@ -240,12 +241,12 @@ const actions = {
         Authorization: `Token ${localStorage.getItem('token')}`
       }
     })
-      .then(res => {
+      .then(() => {
         commit(DELETE_ARTICLE, payload.slug)
         router.push(`/profile/${payload.username}`)
       })
       .catch(err => {
-        console.log(err)
+        throw err
       })
   },
 

@@ -138,33 +138,24 @@
 
         <div class="col-xs-12 col-md-8 offset-md-2">
 
-          <form class="card comment-form">
+          <form @submit.prevent="onAddComment" class="card comment-form">
             <div class="card-block">
-              <textarea class="form-control" placeholder="Write a comment..." rows="3"></textarea>
+              <textarea v-model="comment.body" class="form-control" placeholder="Write a comment..." rows="3"></textarea>
             </div>
             <div class="card-footer">
               <img v-if="user" :src="user.image" class="comment-author-img" />
               &nbsp;
               <router-link v-if="user" :to="`/profile/${user.username}`">{{ user.username }}</router-link>
-              <button class="btn btn-sm btn-primary">
+              <button type="submit" class="btn btn-sm btn-primary">
               Post Comment
               </button>
             </div>
           </form>
 
-          <div v-for="comment in commentList" :key="comment.id" class="card">
-            <div class="card-block">
-              <p class="card-text">{{ comment.body }}</p>
-            </div>
-            <div class="card-footer">
-              <router-link class="comment-author" :to="`/profile/${comment.author.username}`">
-                <img :src="comment.author.image" class="comment-author-img"/>
-              </router-link>
-              &nbsp;
-              <router-link class="comment-author" :to="`/profile/${comment.author.username}`">{{ comment.author.username }}</router-link>
-              <span class="date-posted">{{ formatDate(comment.createdAt) }}</span>
-            </div>
-          </div>
+          <comment-item
+            v-for="comment in commentList" :key="comment.id"
+            :comment="comment"
+            @delete="onDeleteComment(comment.id)"/>
 
         </div>
 
@@ -176,8 +167,21 @@
 
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex'
+import CommentItem from '../../components/CommentItem'
 
 export default {
+  components: {
+    CommentItem
+  },
+
+  data() {
+    return {
+      comment: {
+        body: ''
+      }
+    }
+  },
+
   computed: {
     ...mapState('article', ['commentList', 'article']),
     ...mapState('auth', ['user', 'username', 'token']),
@@ -185,7 +189,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('article', ['loadComments', 'loadArticle', 'followAuthor', 'unfollowAuthor']),
+    ...mapActions('article', ['loadComments', 'addComment', 'deleteComment', 'loadArticle', 'followAuthor', 'unfollowAuthor']),
     ...mapActions('articles', ['addFavorite', 'removeFavorite', 'deleteArticle']),
     ...mapActions('auth', ['fetchUser']),
     ...mapMutations('message', ['ADD_MESSAGE', 'CLEAR_MESSAGE']),
@@ -236,6 +240,28 @@ export default {
       this.deleteArticle({
         slug: this.article.slug,
         username: this.article.author.username
+      })
+    },
+
+    onAddComment () {
+      if (!localStorage.getItem('token')) {
+        this.ADD_MESSAGE(['You need to login to comment.'])
+        setTimeout(() => {
+          this.CLEAR_MESSAGE()
+        }, 3000);
+        return
+      }
+
+      this.addComment({
+        comment: this.comment,
+        slug: this.article.slug
+      }).then(() => this.comment.body = '')
+    },
+
+    onDeleteComment (id) {
+      this.deleteComment({
+        slug: this.article.slug,
+        id: id
       })
     }
   },
