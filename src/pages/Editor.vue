@@ -5,7 +5,10 @@
 
         <div class="col-md-10 offset-md-1 col-xs-12">
           <create-form
-            :article="article"/>
+            :article="article"
+            :tag="tag"
+            :isEditing="false"
+            @submit="onCreateArticle"/>
         </div>
 
       </div>
@@ -16,7 +19,6 @@
 <script>
 import { mapActions } from 'vuex'
 import CreateForm from '../components/ArticleForm'
-
 
 export default {
   components: {
@@ -29,24 +31,30 @@ export default {
         title: '',
         description: '',
         body: '',
-        tagList: []
+        tagList: [],
       },
       tag: ''
     }
   },
+
+  methods: {
+    ...mapActions('articles', ['createArticle']),
+
+    onCreateArticle () {
+      this.createArticle(this.article).then(() => {
+        this.article = {
+          title: '',
+          description: '',
+          body: '',
+          tagList: [],
+        }
+      })
+    }
+  }
 }
 </script>
 
 <style scoped>
-.tag-list li {
-  list-style: none;
-  display: inline;
-  margin-right: 4px;
-  padding: 2px 8px;
-  background: #f2f2f2;
-  border-radius: 4px;
-}
-
 .error {
   color: #d65042;
   font-size: 12px;
