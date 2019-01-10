@@ -63,8 +63,8 @@ const actions = {
       axios.get(`articles/${slug}`)
         .then(res => commit(LOAD_ARTICLE, res.data.article))
         .catch(err => {
-          console.log(err)
-        });
+          throw err
+        })
     } else {
       axios({
         method: 'get',
@@ -74,6 +74,9 @@ const actions = {
         }
       })
         .then(res => commit(LOAD_ARTICLE, res.data.article))
+        .catch(err => {
+          throw err
+        })
     }
   },
 
@@ -98,7 +101,7 @@ const actions = {
         commit(ADD_COMMENT, res.data.comment)
       })
       .catch(err => {
-        console.log(err)
+        throw err
       })
   },
 
@@ -114,7 +117,7 @@ const actions = {
         commit(DELETE_COMMENT, payload.id)
       })
       .catch(err => {
-        console.log(err)
+        throw err
       })
   },
 
