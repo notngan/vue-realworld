@@ -7,7 +7,8 @@ import {
   REMOVE_FAVORITE,
   CREATE_ARTICLE,
   LOAD_TAGS,
-  UPDATE_ARTICLE
+  UPDATE_ARTICLE,
+  DELETE_ARTICLE
 } from '../mutation-types'
 
 const state = {
@@ -43,6 +44,11 @@ const mutations = {
   [UPDATE_ARTICLE] (state, payload) {
     let article = state.articleList.find(art => art.slug === payload.slug)
     article = Object.assign({}, payload)
+  },
+
+  [DELETE_ARTICLE] (state, payload) {
+    let article = state.articleList.find(art => art.slug === payload)
+    article = null
   }
 }
 
@@ -223,6 +229,23 @@ const actions = {
       .then(res => {
         commit(UPDATE_ARTICLE, res.data.article)
         router.push(`/article/${res.data.article.slug}`)
+      })
+  },
+
+  deleteArticle ({ commit }, payload) {
+    axios({
+      method: 'delete',
+      url: `articles/${payload.slug}`,
+      headers: {
+        Authorization: `Token ${localStorage.getItem('token')}`
+      }
+    })
+      .then(res => {
+        commit(DELETE_ARTICLE, payload.slug)
+        router.push(`/profile/${payload.username}`)
+      })
+      .catch(err => {
+        console.log(err)
       })
   },
 
