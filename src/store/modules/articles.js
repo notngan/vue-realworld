@@ -98,7 +98,9 @@ const actions = {
         }
       })
         .then(res => commit(LOAD_ARTICLES, res.data.articles))
-        .catch(err => { throw err })
+        .catch(err => {
+          throw err
+        })
     }
   },
 
@@ -118,7 +120,9 @@ const actions = {
         }
       })
         .then(res => commit(LOAD_ARTICLES, res.data.articles))
-        .catch(err => { throw err })
+        .catch(err => {
+          throw err
+        })
     }
   },
 
@@ -133,9 +137,10 @@ const actions = {
     })
       .then(res => {
         commit(LOAD_ARTICLES, res.data.articles)
-        console.log(res.data.articles)
       })
-      .catch(err => { throw err })
+      .catch(err => {
+        throw err
+      })
   },
 
   addFavorite ({ commit }, slug) {
@@ -154,7 +159,7 @@ const actions = {
         }
       })
       .catch(err => {
-        console.log(err)
+        throw err
       })
   },
 
@@ -179,7 +184,6 @@ const actions = {
   },
 
   createArticle ({ commit }, article) {
-    console.log(article)
     axios({
       method: 'post',
       url: 'articles',
@@ -194,7 +198,7 @@ const actions = {
         commit(CREATE_ARTICLE, res.data.article)
       })
       .catch(err => {
-        console.log(err)
+        throw err
       })
   },
 
@@ -203,7 +207,9 @@ const actions = {
       .then(res => {
         commit(LOAD_TAGS, res.data.tags)
       })
-      .catch(err => { throw err })
+      .catch(err => {
+        throw err
+      })
   },
 
 }

@@ -10,9 +10,9 @@
             <h4>{{ user.username }}</h4>
             <p>{{ user.bio }}</p>
             <button
-              v-if="username !== user.username"
               class="btn btn-sm action-btn"
               :class="{
+              'disabled': user.username === username,
               'btn-secondary': user.following,
               'btn-outline-secondary': !user.following}"
               @click="onFollowUser">
@@ -22,13 +22,8 @@
               <span v-else>Follow</span>
               {{ user.username }}
             </button>
-            <router-link
-              v-if="username == user.username"
-              to="/settings"
-              class="btn btn-sm btn-outline-secondary action-btn">
-              <i class="ion-gear-a"></i> Edit Profile Settings
-            </router-link>
           </div>
+
         </div>
       </div>
     </div>
@@ -41,13 +36,13 @@
             <ul class="nav nav-pills outline-active">
               <li class="nav-item">
                 <router-link
-                  class="nav-link active"
+                  class="nav-link"
                   :to="`/profile/${user.username}`">My Articles</router-link>
               </li>
               <li class="nav-item">
                 <router-link
-                  class="nav-link"
-                  :to="`${user.username}/favorites`"
+                  class="nav-link active"
+                  :to="`/profile/${user.username}/favorites`"
                 >Favorited Articles</router-link>
               </li>
             </ul>
@@ -64,9 +59,10 @@
   </div>
 </template>
 
+
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
-import ArticleItem from '../components/ArticleItem'
+import ArticleItem from '../../components/ArticleItem'
 
 export default {
   components: {
@@ -79,7 +75,7 @@ export default {
 
   methods: {
     ...mapActions('auth', ['fetchUser']),
-    ...mapActions('articles', ['loadArticlesByAuthor']),
+    ...mapActions('articles', ['loadArticlesByFavorite']),
     ...mapActions('article', ['followAuthor', 'unfollowAuthor']),
     ...mapMutations('message', ['ADD_MESSAGE', 'CLEAR_MESSAGE']),
 
@@ -111,19 +107,16 @@ export default {
 
   created () {
     this.fetchUser(this.$route.params.id)
-    this.loadArticlesByAuthor(this.$route.params.id)
+    this.loadArticlesByFavorite(this.$route.params.id)
   },
 
   watch: {
     $route (prev, next) {
       if (prev.params.id !== next.params.id) {
         this.fetchUser(this.$route.params.id)
-        this.loadArticlesByAuthor(this.$route.params.id)
+        this.loadArticlesByFavorite(this.$route.params.id)
       }
     }
   },
 }
 </script>
-
-
-

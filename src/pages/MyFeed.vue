@@ -62,7 +62,8 @@ export default {
   },
 
   computed: {
-    ...mapState('articles', ['articleList', 'tagList'])
+    ...mapState('articles', ['articleList', 'tagList']),
+    ...mapState('auth', ['token'])
   },
 
   methods: {
@@ -73,6 +74,14 @@ export default {
     this.loadFeedArticles();
     this.loadTags()
   },
+
+  watch: {
+    token (val) {
+      if (!val) {
+        this.$router.push('/login')
+      }
+    }
+  }
 }
 </script>
 
