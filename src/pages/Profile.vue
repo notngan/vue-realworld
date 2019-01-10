@@ -10,7 +10,7 @@
             <h4>{{ user.username }}</h4>
             <p>{{ user.bio }}</p>
             <button
-              v-if="currentUser.username !== user.username"
+              v-if="currentUser && currentUser.username !== user.username"
               class="btn btn-sm action-btn"
               :class="{
               'btn-secondary': user.following,
@@ -23,7 +23,7 @@
               {{ user.username }}
             </button>
             <router-link
-              v-if="currentUser.username == user.username"
+              v-if="currentUser && currentUser.username == user.username"
               to="/settings"
               class="btn btn-sm btn-outline-secondary action-btn">
               <i class="ion-gear-a"></i> Edit Profile Settings

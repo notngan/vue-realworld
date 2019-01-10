@@ -42,8 +42,9 @@ const mutations = {
   },
 
   [UPDATE_ARTICLE] (state, payload) {
-    let article = state.articleList.find(art => art.slug === payload.slug)
-    article = Object.assign({}, payload)
+    const article = state.articleList.find(art => art.slug === payload.slug)
+    const index = state.articleList.indexOf(article)
+    state.articleList.splice(index, 1, payload)
   },
 
   [DELETE_ARTICLE] (state, payload) {
