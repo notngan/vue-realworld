@@ -43,8 +43,8 @@ export default {
 
     onAddFavorite () {
       if (!localStorage.getItem('token')) {
-        this.ADD_MESSAGE(['You need to login to continue.'])
         this.$router.push('/login')
+        this.ADD_MESSAGE(['You need to login to continue.'])
         setTimeout(() => {
           this.CLEAR_MESSAGE()
         }, 3000);

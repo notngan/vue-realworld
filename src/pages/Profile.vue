@@ -9,8 +9,14 @@
             <img :src="user.image" class="user-img" />
             <h4>{{ user.username }}</h4>
             <p>{{ user.bio }}</p>
+            <router-link
+              v-if="currentUser && currentUser.username == user.username"
+              to="/settings"
+              class="btn btn-sm btn-outline-secondary action-btn">
+              <i class="ion-gear-a"></i> Edit Profile Settings
+            </router-link>
             <button
-              v-if="currentUser && currentUser.username !== user.username"
+              v-else
               class="btn btn-sm action-btn"
               :class="{
               'btn-secondary': user.following,
@@ -22,12 +28,6 @@
               <span v-else>Follow</span>
               {{ user.username }}
             </button>
-            <router-link
-              v-if="currentUser && currentUser.username == user.username"
-              to="/settings"
-              class="btn btn-sm btn-outline-secondary action-btn">
-              <i class="ion-gear-a"></i> Edit Profile Settings
-            </router-link>
           </div>
         </div>
       </div>
@@ -84,16 +84,16 @@ export default {
     ...mapMutations('message', ['ADD_MESSAGE', 'CLEAR_MESSAGE']),
 
     onFollowUser () {
-      if (this.currentUser.username === this.user.username) return
-
       if (!localStorage.getItem('token')) {
-        this.ADD_MESSAGE(['You need to login to continue.'])
         this.$router.push('/login')
+        this.ADD_MESSAGE(['You need to login to continue.'])
         setTimeout(() => {
           this.CLEAR_MESSAGE()
         }, 3000);
         return
       }
+
+      if (this.currentUser.username === this.user.username) return
 
       if (this.user.following) {
         this.unfollowAuthor({
