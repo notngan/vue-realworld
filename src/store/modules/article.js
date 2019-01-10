@@ -5,7 +5,9 @@ import {
   ADD_FAVORITE_LOCAL,
   REMOVE_FAVORITE_LOCAL,
   FOLLOW_AUTHOR,
-  UNFOLLOW_AUTHOR
+  UNFOLLOW_AUTHOR,
+  ADD_COMMENT,
+  DELETE_COMMENT
 } from '../mutation-types'
 
 const state = {
@@ -39,7 +41,18 @@ const mutations = {
 
   [UNFOLLOW_AUTHOR] (state) {
     state.article.author.following = false
+  },
+
+  [ADD_COMMENT] (state, comment) {
+    state.commentList.push(comment)
+  },
+
+  [DELETE_COMMENT] (state, id) {
+    const comment = state.commentList.find(cmt => cmt.id === id)
+    const index = state.commentList.indexOf(comment)
+    state.commentList.splice(index, 1)
   }
+
 }
 
 const token = localStorage.getItem('token')
@@ -71,6 +84,39 @@ const actions = {
       .catch(err => {
         throw err
     })
+  },
+
+  addComment({ commit }, payload) {
+    axios({
+      method: 'post',
+      url: `articles/${payload.slug}/comments`,
+      data: payload.comment,
+      headers: {
+        Authorization: `Token ${token}`
+      }
+    })
+      .then(res => {
+        commit(ADD_COMMENT, res.data.comment)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  },
+
+  deleteComment({ commit }, payload) {
+    axios({
+      method: 'delete',
+      url: `articles/${payload.slug}/comments/${payload.id}`,
+      headers: {
+        Authorization: `Token ${token}`
+      }
+    })
+      .then(res => {
+        commit(DELETE_COMMENT, payload.id)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   },
 
   followAuthor ({ commit }, payload) {
