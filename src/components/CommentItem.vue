@@ -23,11 +23,14 @@
 
 <script>
 import { mapState } from 'vuex'
+import mixin from '../mixin'
 
 export default {
   props: {
     comment: Object
   },
+
+  mixins: [mixin],
 
   computed: {
     ...mapState('auth', ['username'])

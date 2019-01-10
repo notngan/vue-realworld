@@ -162,8 +162,11 @@
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex'
 import CommentItem from '../../components/CommentItem'
+import mixin from '../../mixin'
 
 export default {
+  mixins: [mixin],
+
   components: {
     CommentItem
   },
