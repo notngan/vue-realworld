@@ -49,8 +49,7 @@
               <li class="nav-item">
                 <router-link
                   class="nav-link active"
-                  :to="`/profile/${user.username}/favorites`"
-                >Favorited Articles</router-link>
+                  :to="`/profile/${user.username}/favorites`">Favorited Articles</router-link>
               </li>
             </ul>
           </div>

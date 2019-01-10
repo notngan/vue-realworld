@@ -56,7 +56,11 @@
 <script>
 
 export default {
-  props: ['article', 'tag', 'isEditing'],
+  props: {
+    article: Object,
+    tag: String,
+    isEditing: Boolean
+  },
 
   data() {
     return {

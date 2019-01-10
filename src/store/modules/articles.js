@@ -72,7 +72,9 @@ const actions = {
         }
       })
         .then(res => commit(LOAD_ARTICLES, res.data.articles))
-        .catch(err => { throw err })
+        .catch(err => {
+          throw err
+        })
     }
   },
 
@@ -92,7 +94,9 @@ const actions = {
         }
       })
         .then(res => commit(LOAD_ARTICLES, res.data.articles))
-        .catch(err => { throw err })
+        .catch(err => {
+          throw err
+        })
     }
   },
 
@@ -157,16 +161,16 @@ const actions = {
       })
   },
 
-  addFavorite ({ commit }, slug) {
+  addFavorite ({ commit }, payload) {
     axios({
       method: 'post',
-      url: `articles/${slug}/favorite`,
+      url: `articles/${payload.slug}/favorite`,
       headers: {
         Authorization: `Token ${localStorage.getItem('token')}`
       }
     })
       .then(res => {
-        if (router.history.current.params.id) {
+        if (payload.route === 'article') {
           commit('article/ADD_FAVORITE_LOCAL', null, { root: true })
         } else {
           commit(ADD_FAVORITE, res.data.article.slug)
@@ -177,16 +181,16 @@ const actions = {
       })
   },
 
-  removeFavorite ({ commit }, slug) {
+  removeFavorite ({ commit }, payload) {
     axios({
       method: 'delete',
-      url: `articles/${slug}/favorite`,
+      url: `articles/${payload.slug}/favorite`,
       headers: {
         Authorization: `Token ${localStorage.getItem('token')}`
       }
     })
       .then(res => {
-        if (router.history.current.params.id) {
+        if (payload.route === 'article') {
           commit('article/REMOVE_FAVORITE_LOCAL', null, { root: true })
         } else {
           commit(REMOVE_FAVORITE, res.data.article.slug)
