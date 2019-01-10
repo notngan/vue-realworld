@@ -119,6 +119,7 @@ const actions = {
   },
 
   followAuthor ({ commit }, payload) {
+    const token = localStorage.getItem('token')
     axios({
       method: 'post',
       url: `profiles/${payload.username}/follow`,
@@ -139,6 +140,7 @@ const actions = {
   },
 
   unfollowAuthor ({ commit }, payload) {
+    const token = localStorage.getItem('token')
     axios({
       method: 'delete',
       url: `profiles/${payload.username}/follow`,
