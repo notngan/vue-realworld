@@ -84,12 +84,8 @@ const actions = {
   fetchUser ({ commit, dispatch }, username) {
     if (!token) {
       axios.get(`profiles/${username}`)
-        .then(res => {
-          commit(FETCH_USER, res.data.profile)
-        })
-        .catch(err => {
-          dispatch('message/addMessage', err.response.data.errors, { root: true })
-        })
+        .then(res => commit(FETCH_USER, res.data.profile))
+        .catch(err => dispatch('message/addMessage', err.response.data.errors, { root: true }))
     } else {
       axios({
         method: 'get',
@@ -98,12 +94,8 @@ const actions = {
           Authorization: `Token ${token}`
         }
       })
-      .then(res => {
-        commit(FETCH_USER, res.data.profile)
-      })
-      .catch(err => {
-        dispatch('message/addMessage', err.response.data.errors, { root: true })
-      })
+        .then(res => commit(FETCH_USER, res.data.profile))
+        .catch(err => dispatch('message/addMessage', err.response.data.errors, { root: true }))
     }
   },
 
@@ -122,7 +114,7 @@ const actions = {
       })
   },
 
-  updateUser ({ commit }, user) {
+  updateUser ({ commit, dispatch }, user) {
     axios({
       method: 'put',
       url: 'user',
@@ -135,7 +127,7 @@ const actions = {
         commit(SET_CURRENT_USER, res.data.user)
         router.push(`/profile/${res.data.user.username}`)
       })
-      .catch(err => console.log(err.response.errors))
+      .catch(err => dispatch('message/addMessage', err.response.data.errors, { root: true }))
   }
 }
 

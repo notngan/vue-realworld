@@ -5,8 +5,7 @@
       <button
         @click="onDeleteComment"
         class="btn-delete btn btn-outline-danger btn-sm"
-        v-if="username === comment.author.username"
-      >
+        v-if="username === comment.author.username">
         <i class="ion-trash-a"></i>
       </button>
     </div>
@@ -40,7 +39,7 @@ export default {
     onDeleteComment () {
       this.$emit('delete')
     }
-  },
+  }
 }
 </script>
 

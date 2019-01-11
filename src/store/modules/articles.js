@@ -192,6 +192,8 @@ const actions = {
       .then(res => {
         if (payload.route === 'article') {
           commit('article/REMOVE_FAVORITE_LOCAL', null, { root: true })
+        } else if (payload.route === 'favorites') {
+            commit(DELETE_ARTICLE, res.data.article.slug)
         } else {
           commit(REMOVE_FAVORITE, res.data.article.slug)
         }
@@ -263,7 +265,7 @@ const actions = {
       .catch(err => {
         throw err
       })
-  },
+  }
 
 }
 
