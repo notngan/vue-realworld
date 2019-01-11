@@ -35,6 +35,12 @@
       <p>{{ article.description }}</p>
       <span>Read more...</span>
     </router-link>
+    <ul class="article-tags">
+      <li v-for="(tag, index) in article.tagList" :key="index">
+        <router-link :to="{ path: '/articles', query: { tag: tag } }">{{ tag }}
+        </router-link>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -84,4 +90,26 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.article-tags {
+  text-align: right;
+  margin: 0;
+}
+
+.article-tags li {
+  list-style: none;
+  display: inline;
+  margin: 0 4px;
+  font-size: 11px;
+  padding: 2px 4px;
+  background: #f2f2f2;
+  border-radius: 4px;
+}
+
+.article-tags a {
+  color: #666;
+}
+</style>
+
 
