@@ -146,7 +146,7 @@ export default {
         this.loadArticlesByTag(this.$route.query.tag)
       }
     }
-  },
+  }
 }
 </script>
 

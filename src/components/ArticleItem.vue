@@ -9,10 +9,21 @@
         <span class="date">{{ formatDate(article.createdAt) }}</span>
       </div>
       <button
+        v-if="currentUser"
         @click="onAddFavorite"
         class="btn btn-sm pull-xs-right"
         :class="{
           'disabled': article.author.username === currentUser.username,
+          'btn-primary': article.favorited,
+          'btn-outline-primary': !article.favorited
+        }">
+        <i class="ion-heart"></i> {{ article.favoritesCount }}
+      </button>
+      <button
+        v-else
+        @click="onAddFavorite"
+        class="btn btn-sm pull-xs-right"
+        :class="{
           'btn-primary': article.favorited,
           'btn-outline-primary': !article.favorited
         }">

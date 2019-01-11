@@ -123,6 +123,6 @@ export default {
         this.loadArticlesByFavorite(this.$route.params.id)
       }
     }
-  },
+  }
 }
 </script>

@@ -275,7 +275,7 @@ export default {
     if (this.username) {
       this.fetchUser(this.username)
     }
-  },
+  }
 }
 </script>
 

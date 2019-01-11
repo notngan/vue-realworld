@@ -72,13 +72,7 @@ export default {
   created() {
     this.loadArticles();
     this.loadTags()
-  },
-
-  watch: {
-    $route (prev, next) {
-      console.log(prev, next)
-    }
-  },
+  }
 
 }
 </script>
